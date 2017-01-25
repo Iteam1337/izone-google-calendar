@@ -1,0 +1,23 @@
+{
+  "name": "izone-google-calendar",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Iteam1337/izone-google-calendar.git"
+  },
+  "author": "ilix <src@ilix.se>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Iteam1337/izone-google-calendar/issues"
+  },
+  "homepage": "https://github.com/Iteam1337/izone-google-calendar#readme",
+  "dependencies": {
+    "google-auth-library": "^0.10.0",
+    "googleapis": "^16.1.0"
+  }
+}
