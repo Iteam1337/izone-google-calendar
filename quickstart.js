@@ -5,7 +5,7 @@ var googleAuth = require('google-auth-library');
 
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-nodejs-quickstart.json
-var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
+var SCOPES = ['https://www.googleapis.com/auth/calendar'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
@@ -101,11 +101,12 @@ function storeToken(token) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function listEvents(auth) {
+  console.log((new Date()).toISOString())
   var calendar = google.calendar('v3');
   calendar.events.list({
     auth: auth,
     calendarId: 'primary',
-    timeMin: (new Date()).toISOString(),
+    timeMin: '2017-01-23T00:00:00.000Z',
     maxResults: 10,
     singleEvents: true,
     orderBy: 'startTime'
@@ -121,9 +122,42 @@ function listEvents(auth) {
       console.log('Upcoming 10 events:');
       for (var i = 0; i < events.length; i++) {
         var event = events[i];
+
+        if (event.summary.indexOf(':') === -1 && event.summary.indexOf(';') === -1) {
+          continue
+        }
         var start = event.start.dateTime || event.start.date;
-        console.log('%s - %s', start, event.summary);
+        
+        if (event.summary.indexOf(':') > -1) {
+          console.log('%s - %s', start, event.summary, '<-- import');
+          updateEvent(auth, event)
+        } else {
+          console.log('%s - %s', start, event.summary);
+        }
       }
     }
   });
+}
+
+function updateEvent (auth, event) {
+  var calendar = google.calendar('v3');
+  calendar.events.update({
+    auth: auth,
+    calendarId: 'primary',
+    eventId: event.id,
+    resource: {
+      
+      summary: event.summary.replace(':', ';'),
+      end: event.end,
+      start: event.start
+    }
+  }, function (err, res) {
+    if (err) {
+      console.error('err', err)
+      return
+    }
+
+    console.log('Updated', event.summary)
+    return
+  })
 }
