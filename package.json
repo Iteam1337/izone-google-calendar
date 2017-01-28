@@ -29,7 +29,6 @@
   },
   "homepage": "https://iteam.se",
   "dependencies": {
-    "dotenv": "^4.0.0",
     "google-auth-library": "^0.10.0",
     "googleapis": "^16.1.0",
     "mssql": "^3.3.0",
