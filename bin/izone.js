@@ -2,4 +2,4 @@
 
 'use strict';
 
-require('../izone.js')();
+require('../izone.js');
