@@ -16,27 +16,24 @@ const r = () => {
     case 'ls':
       return googleCalendar.getEvents()
         .then(events => {
+          const tasks = []
           events.map(event => {
             if (event.summary.indexOf(':') > -1) {
               const start = event.start.dateTime || event.start.date
-              console.log(start, event.summary)
               const alias = event.summary.substring(0, event.summary.indexOf(':'))
-              console.log('alias', alias)
-              izoneAdapter.getJobByAlias(alias)
+              tasks.push(izoneAdapter.getJobByAlias(alias)
                 .then(job => {
                   job = job[0]
-                  console.log(`Job (${alias}:)`, job.job_title)
+                  console.log()
+                  console.log('->', event.summary, `(Starting at ${start})`)
+                  console.log('  ', `Izone job (${alias}:)`, job.job_title)
                 })
                 .catch(error => {
                   console.error('oh noes', error)
-                })
-            }
-
-            if (event.summary.indexOf(';') > -1) {
-              const start = event.start.dateTime || event.start.date
-              console.log(start, event.summary, '(Imported)')
+                }))
             }
           })
+          return Promise.all(tasks)
         })
     default:
       return Promise.reject((`Command "${_command}" is not declared.`))
@@ -45,7 +42,7 @@ const r = () => {
 
 r()
   .then(() => {
-    console.log(`Command '${_command}' completed!`)
+    console.log()
   })
   .catch(error => {
     exitCode = 1
@@ -61,5 +58,5 @@ r()
   })
   .then(() => {
     console.log()
-    // process.exit(exitCode)
+    process.exit(exitCode)
   })
