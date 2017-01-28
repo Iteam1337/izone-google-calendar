@@ -17,8 +17,10 @@ const r = () => {
      */
     case 'ls':
       return cli.ls()
+    case 'import':
+      return cli.import()
     default:
-      return Promise.reject((`Command "${_command}" is not declared.`))
+      return Promise.reject((`Command '${_command}' is not declared.`))
   }
 }
 
@@ -36,7 +38,7 @@ r()
       console.error(`Error: ${error.statusCode} ${error.statusMessage}`)
     }
 
-    console.error(`Command '${_command}' resulted in error.`)
+    console.error(error)
   })
   .then(() => {
     console.log()
