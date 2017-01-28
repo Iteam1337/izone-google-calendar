@@ -8,6 +8,14 @@ mkdir ~/.izone
 
 Save your config.json in ~/.izone
 
+## Using
+```
+# list pending time entries
+izone ls
+
+# import to izone
+izone import
+```
 ## Sample config.json
 ```
 {
