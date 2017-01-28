@@ -8,7 +8,7 @@ mkdir ~/.izone
 
 Save your config.json in ~/.izone
 
-## Sample config
+## Sample config.json
 ```
 {
   "google": {
