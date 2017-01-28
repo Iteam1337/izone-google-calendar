@@ -3,12 +3,16 @@
   "version": "0.0.1",
   "description": "Izone time reporting with Google Calendar",
   "main": "index.js",
+  "bin": {
+    "izone": "bin/izone.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "patch": "npm version patch && npm publish && git push origin master --follow-tags",
     "minor": "npm version minor && npm publish && git push origin master --follow-tags",
     "major": "npm version major && npm publish && git push origin master --follow-tags"
   },
+  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Iteam1337/izone-google-calendar.git"
@@ -24,7 +28,7 @@
   "bugs": {
     "url": "https://github.com/Iteam1337/izone-google-calendar/issues"
   },
-  "homepage": "https://github.com/Iteam1337/izone-google-calendar#readme",
+  "homepage": "https://iteam.se",
   "dependencies": {
     "dotenv": "^4.0.0",
     "google-auth-library": "^0.10.0",
