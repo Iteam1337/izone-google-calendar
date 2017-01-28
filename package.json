@@ -1,16 +1,25 @@
 {
-  "name": "izone-google-calendar",
+  "name": "izone",
   "version": "0.0.1",
-  "description": "",
+  "description": "Izone time reporting with Google Calendar",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "patch": "npm version patch && npm publish && git push origin master --follow-tags",
+    "minor": "npm version minor && npm publish && git push origin master --follow-tags",
+    "major": "npm version major && npm publish && git push origin master --follow-tags"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Iteam1337/izone-google-calendar.git"
   },
-  "author": "ilix <src@ilix.se>",
+  "author": "Alexander Czigler <src@ilix.se>",
+  "contributors": [
+    {
+      "name": "Alexander Czigler",
+      "email": "src@ilix.se"
+    }
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Iteam1337/izone-google-calendar/issues"
