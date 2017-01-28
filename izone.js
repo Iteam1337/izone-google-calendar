@@ -13,7 +13,7 @@ if (!_command) {
 
 const r = () => {
   switch (_command) {
-    case 'show':
+    case 'ls':
       return googleCalendar.getEvents()
         .then(events => {
           events.map(event => {
@@ -24,7 +24,8 @@ const r = () => {
               console.log('alias', alias)
               izoneAdapter.getJobByAlias(alias)
                 .then(job => {
-                  console.log(`Job (${alias}:)`, job_title)
+                  job = job[0]
+                  console.log(`Job (${alias}:)`, job.job_title)
                 })
                 .catch(error => {
                   console.error('oh noes', error)
