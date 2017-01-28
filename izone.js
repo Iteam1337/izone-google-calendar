@@ -1,7 +1,6 @@
 'use strict'
 
-const googleCalendar = require('./lib/adapters/googleCalendar')
-const izoneAdapter = require('./lib/adapters/izone')
+const cli = require('./lib/cli')
 
 let exitCode = 0
 const _command = process.argv[2]
@@ -13,28 +12,11 @@ if (!_command) {
 
 const r = () => {
   switch (_command) {
+    /*
+     * Lists new hours and matching izone job.
+     */
     case 'ls':
-      return googleCalendar.getEvents()
-        .then(events => {
-          const tasks = []
-          events.map(event => {
-            if (event.summary.indexOf(':') > -1) {
-              const start = event.start.dateTime || event.start.date
-              const alias = event.summary.substring(0, event.summary.indexOf(':'))
-              tasks.push(izoneAdapter.getJobByAlias(alias)
-                .then(job => {
-                  job = job[0]
-                  console.log()
-                  console.log('->', event.summary, `(Starting at ${start})`)
-                  console.log('  ', `Izone job (${alias}:)`, job.job_title)
-                })
-                .catch(error => {
-                  console.error('oh noes', error)
-                }))
-            }
-          })
-          return Promise.all(tasks)
-        })
+      return cli.ls()
     default:
       return Promise.reject((`Command "${_command}" is not declared.`))
   }
