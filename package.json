@@ -34,6 +34,7 @@
     "googleapis": "^16.1.0",
     "mocha": "^3.2.0",
     "moment": "^2.17.1",
+    "moment-timezone": "^0.5.11",
     "mssql": "^3.3.0",
     "nconf": "^0.8.4",
     "proxyquire": "^1.7.11",
