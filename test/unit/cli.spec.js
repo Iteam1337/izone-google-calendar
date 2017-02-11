@@ -14,10 +14,13 @@ describe('command line interface', () => {
 
   beforeEach(() => {
     databaseAdapter = {
-      getJobByAlias: stub().resolves(
+      getJobLogs: stub().resolves(
         [
           {
-            job_title: 'Iteam code writing'
+            jl_alias: 'iteam:',
+            job_title: 'Iteam code writing',
+            jl_starttime: '2017-01-27T16:00:00+01:00',
+            jl_endtime: '2017-01-27T16:00:00+01:00'
           }
         ]
       )
@@ -28,7 +31,12 @@ describe('command line interface', () => {
         [
           {
             summary: 'iteam: Writing some code',
-            start: '2017-01-27T16:00:00+01:00'
+            start: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            }
           }
         ]
       )
@@ -51,9 +59,7 @@ describe('command line interface', () => {
     it('gets jobs from database', () => {
       return cli.ls()
         .then(() => {
-          expect(databaseAdapter.getJobByAlias)
-            .calledOnce
-            .calledWith('iteam')
+          expect(databaseAdapter.getJobLogs).calledOnce
         })
     })
   })
