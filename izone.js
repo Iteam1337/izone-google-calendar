@@ -18,7 +18,7 @@ const r = () => {
     case 'ls':
       return cli.ls(process.argv[3])
     case 'import':
-      return cli.import()
+      return cli.import(process.argv[3])
     default:
       return Promise.reject((`Command '${_command}' is not declared.`))
   }
