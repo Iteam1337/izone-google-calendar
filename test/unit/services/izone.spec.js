@@ -2,7 +2,7 @@
 
 const chai = require('chai')
 const expect = chai.expect
-const {spy, stub} = require('sinon')
+const {stub} = require('sinon')
 const proxyquire = require('proxyquire')
 
 require('sinon-as-promised')
@@ -14,7 +14,17 @@ describe('izone service', () => {
 
   beforeEach(() => {
     databaseAdapter = {
-      getPerson: stub().resolves(
+      getJobLogs: stub().resolves(
+        [
+          {
+            jl_alias: 'iteam:',
+            job_title: 'Iteam code writing',
+            jl_starttime: '2017-01-27T16:00:00+01:00',
+            jl_endtime: '2017-01-27T16:00:00+01:00'
+          }
+        ]
+      ),
+      getPerson: stub().resolves([
         {
           p_shortname: 'mew',
           p_emal: 'mew@iteam.se',
@@ -22,14 +32,27 @@ describe('izone service', () => {
           p_lastname: 'kitteh',
           p_title: 'Office Cat'
         }
-      )
+      ])
     }
-    
+
     googleAdapter = {
       getCalendars: stub().resolves(
         {
           id: 'mew@iteam.se'
         }
+      ),
+      getEvents: stub().resolves(
+        [
+          {
+            summary: 'iteam: Writing some code',
+            start: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            }
+          }
+        ]
       )
     }
 
@@ -39,12 +62,33 @@ describe('izone service', () => {
     })
   })
 
+  describe('getAllEvents()', () => {
+    it('gets events from google', () => {
+      return service.getAllEvents('2017w10')
+        .then(() => {
+          expect(googleAdapter.getEvents)
+            .calledOnce
+            .calledWith()
+        })
+    })
+
+    it('gets jobs from database', () => {
+      return service.getAllEvents('2017w10')
+        .then(() => {
+          expect(databaseAdapter.getJobLogs)
+            .calledOnce
+            .calledWith()
+        })
+    })
+  })
+
   describe('getIzoneUser()', () => {
     it('gets calendar from google', () => {
       return service.getIzoneUser()
         .then(() => {
           expect(googleAdapter.getCalendars)
             .calledOnce
+            .calledWith()
         })
     })
 

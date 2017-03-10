@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "mocha ./test --recursive",
+    "standard": "node_modules/standard/bin/cmd.js | node_modules/snazzy/bin/cmd.js",
     "patch": "npm version patch && npm publish && git push origin master --follow-tags",
     "minor": "npm version minor && npm publish && git push origin master --follow-tags",
     "major": "npm version major && npm publish && git push origin master --follow-tags"
@@ -29,17 +30,34 @@
   },
   "homepage": "https://iteam.se",
   "dependencies": {
-    "chai": "^3.5.0",
     "google-auth-library": "^0.10.0",
     "googleapis": "^16.1.0",
-    "mocha": "^3.2.0",
     "moment": "^2.17.1",
     "moment-timezone": "^0.5.11",
     "mssql": "^3.3.0",
-    "nconf": "^0.8.4",
+    "nconf": "^0.8.4"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
     "proxyquire": "^1.7.11",
     "sinon": "^1.17.7",
     "sinon-as-promised": "^4.0.2",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "snazzy": "^6.0.0",
+    "standard": "^9.0.1"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "xdescribe",
+      "it",
+      "xit",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "context"
+    ]
   }
 }

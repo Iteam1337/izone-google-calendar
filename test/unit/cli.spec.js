@@ -2,7 +2,7 @@
 
 const chai = require('chai')
 const expect = chai.expect
-const {spy, stub} = require('sinon')
+const {stub} = require('sinon')
 const proxyquire = require('proxyquire')
 
 require('sinon-as-promised')
@@ -10,25 +10,23 @@ chai.use(require('sinon-chai'))
 
 describe('command line interface', () => {
   let cli
-  let databaseAdapter, googleAdapter
+  let databaseAdapter, googleAdapter, izoneService
 
   beforeEach(() => {
-    databaseAdapter = {
-      getJobLogs: stub().resolves(
-        [
+    databaseAdapter = {}
+    googleAdapter = {}
+
+    izoneService = {
+      getAllEvents: stub().resolves({
+        izone: [
           {
             jl_alias: 'iteam:',
             job_title: 'Iteam code writing',
             jl_starttime: '2017-01-27T16:00:00+01:00',
             jl_endtime: '2017-01-27T16:00:00+01:00'
           }
-        ]
-      )
-    }
-    
-    googleAdapter = {
-      getEvents: stub().resolves(
-        [
+        ],
+        calendar: [
           {
             summary: 'iteam: Writing some code',
             start: {
@@ -39,27 +37,35 @@ describe('command line interface', () => {
             }
           }
         ]
+      }
       )
     }
 
     cli = proxyquire(process.cwd() + '/lib/cli', {
       './adapters/database': databaseAdapter,
-      './adapters/google': googleAdapter
+      './adapters/google': googleAdapter,
+      './services/izone': izoneService
     })
   })
 
   describe('ls', () => {
-    it('gets events from google', () => {
-      return cli.ls()
+    it('gets events from services/izone', () => {
+      return cli.ls('2017w10')
         .then(() => {
-          expect(googleAdapter.getEvents).calledOnce
+          expect(izoneService.getAllEvents)
+            .calledOnce
+            .calledWith('2017w10')
         })
     })
+  })
 
-    it('gets jobs from database', () => {
-      return cli.ls()
+  describe('import', () => {
+    it('gets events from services/izone', () => {
+      return cli.import('2017w10')
         .then(() => {
-          expect(databaseAdapter.getJobLogs).calledOnce
+          expect(izoneService.getAllEvents)
+            .calledOnce
+            .calledWith('2017w10')
         })
     })
   })
