@@ -1,5 +1,4 @@
 #!/usr/bin/env node
 
-'use strict';
-
-require('../izone.js');
+'use strict'
+require('../izone.js')

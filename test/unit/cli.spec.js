@@ -2,7 +2,7 @@
 
 const chai = require('chai')
 const expect = chai.expect
-const {spy, stub} = require('sinon')
+const {stub} = require('sinon')
 const proxyquire = require('proxyquire')
 
 require('sinon-as-promised')
@@ -14,7 +14,6 @@ describe('command line interface', () => {
 
   beforeEach(() => {
     databaseAdapter = {}
-    
     googleAdapter = {}
 
     izoneService = {
@@ -51,18 +50,22 @@ describe('command line interface', () => {
 
   describe('ls', () => {
     it('gets events from services/izone', () => {
-      return cli.ls()
+      return cli.ls('2017w10')
         .then(() => {
-          expect(izoneService.getAllEvents).calledOnce
+          expect(izoneService.getAllEvents)
+            .calledOnce
+            .calledWith('2017w10')
         })
     })
   })
 
   describe('import', () => {
     it('gets events from services/izone', () => {
-      return cli.import()
+      return cli.import('2017w10')
         .then(() => {
-          expect(izoneService.getAllEvents).calledOnce
+          expect(izoneService.getAllEvents)
+            .calledOnce
+            .calledWith('2017w10')
         })
     })
   })

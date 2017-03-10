@@ -20,7 +20,7 @@ const r = () => {
     case 'import':
       return cli.import(process.argv[3])
     default:
-      return Promise.reject((`Command '${_command}' is not declared.`))
+      return Promise.reject(new Error((`Command '${_command}' is not declared.`)))
   }
 }
 

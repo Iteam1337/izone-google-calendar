@@ -2,7 +2,7 @@
 
 const chai = require('chai')
 const expect = chai.expect
-const {spy, stub} = require('sinon')
+const {stub} = require('sinon')
 const proxyquire = require('proxyquire')
 
 require('sinon-as-promised')
@@ -34,7 +34,7 @@ describe('izone service', () => {
         }
       ])
     }
-    
+
     googleAdapter = {
       getCalendars: stub().resolves(
         {
@@ -66,14 +66,18 @@ describe('izone service', () => {
     it('gets events from google', () => {
       return service.getAllEvents('2017w10')
         .then(() => {
-          expect(googleAdapter.getEvents).calledOnce
+          expect(googleAdapter.getEvents)
+            .calledOnce
+            .calledWith()
         })
     })
 
     it('gets jobs from database', () => {
       return service.getAllEvents('2017w10')
         .then(() => {
-          expect(databaseAdapter.getJobLogs).calledOnce
+          expect(databaseAdapter.getJobLogs)
+            .calledOnce
+            .calledWith()
         })
     })
   })
@@ -84,6 +88,7 @@ describe('izone service', () => {
         .then(() => {
           expect(googleAdapter.getCalendars)
             .calledOnce
+            .calledWith()
         })
     })
 
