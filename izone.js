@@ -15,10 +15,12 @@ const r = () => {
     /*
      * Lists new hours and matching izone job.
      */
-    case 'ls':
-      return cli.ls(process.argv[3])
     case 'import':
       return cli.import(process.argv[3])
+    case 'ls':
+      return cli.ls(process.argv[3])
+    case 'summary':
+      return cli.summary(process.argv[3])
     default:
       return Promise.reject(new Error((`Command '${_command}' is not declared.`)))
   }
