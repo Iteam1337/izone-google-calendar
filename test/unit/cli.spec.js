@@ -10,14 +10,25 @@ chai.use(require('sinon-chai'))
 
 describe('command line interface', () => {
   let cli
-  let databaseAdapter, googleAdapter, izoneService
+  let cliHelper, databaseAdapter, googleAdapter, izoneService
 
   beforeEach(() => {
-    databaseAdapter = {}
+    cliHelper = {
+      print: stub(),
+      printTimeEntry: stub()
+    }
+    databaseAdapter = {
+      update: stub().resolves()
+    }
     googleAdapter = {}
 
     izoneService = {
-      getAllEvents: stub().resolves({
+      getAllEvents: stub()
+    }
+
+    izoneService.getAllEvents
+      .withArgs('2017w10')
+      .resolves({
         izone: [
           {
             jl_alias: 'iteam:',
@@ -37,11 +48,36 @@ describe('command line interface', () => {
             }
           }
         ]
-      }
-      )
-    }
+      })
+
+    izoneService.getAllEvents
+      .withArgs('2017w11')
+      .resolves({
+        izone: [
+          {
+            jl_alias: 'iteam: meow',
+            job_title: 'Iteam code writing',
+            jl_starttime: '2017-01-27T16:00:00+01:00',
+            jl_endtime: '2017-01-27T17:00:00+01:00',
+            jl_gcal_id: '=^..^='
+          }
+        ],
+        calendar: [
+          {
+            summary: 'iteam: Writing some code',
+            start: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T17:00:00+01:00'
+            },
+            id: '=^..^='
+          }
+        ]
+      })
 
     cli = proxyquire(process.cwd() + '/lib/cli', {
+      './helpers/cli': cliHelper,
       './adapters/database': databaseAdapter,
       './adapters/google': googleAdapter,
       './services/izone': izoneService
@@ -66,6 +102,24 @@ describe('command line interface', () => {
           expect(izoneService.getAllEvents)
             .calledOnce
             .calledWith('2017w10')
+        })
+    })
+
+    it('updates events whose description has been changed in google calendar', () => {
+      return cli.import('2017w11')
+        .then(() => {
+          expect(izoneService.getAllEvents)
+            .calledOnce
+            .calledWith('2017w11')
+
+          expect(databaseAdapter.update)
+            .calledOnce
+            .calledWith('=^..^=', {
+              jl_description: 'Writing some code',
+              jl_starttime: '2017-01-27 16:00:00',
+              jl_endtime: '2017-01-27 17:00:00',
+              jl_hours: 1
+            })
         })
     })
   })
