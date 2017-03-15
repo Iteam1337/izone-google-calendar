@@ -76,6 +76,33 @@ describe('command line interface', () => {
         ]
       })
 
+    izoneService.getAllEvents
+      .withArgs('2017w12')
+      .resolves({
+        izone: [
+          {
+            jl_alias: 'iteam: meow',
+            job_title: 'Iteam code writing',
+            jl_starttime: '2017-01-27T16:00:00+01:00',
+            jl_endtime: '2017-01-27T17:00:00+01:00',
+            jl_gcal_id: '=^..^=',
+            jl_invoiced: true
+          }
+        ],
+        calendar: [
+          {
+            summary: 'iteam: Writing some code',
+            start: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T17:00:00+01:00'
+            },
+            id: '=^..^='
+          }
+        ]
+      })
+
     cli = proxyquire(process.cwd() + '/lib/cli', {
       './helpers/cli': cliHelper,
       './adapters/database': databaseAdapter,
@@ -120,6 +147,17 @@ describe('command line interface', () => {
               jl_endtime: '2017-01-27 17:00:00',
               jl_hours: 1
             })
+        })
+    })
+
+    it('does not update time entry if it has been invoiced', () => {
+      return cli.import('2017w12')
+        .then(() => {
+          expect(izoneService.getAllEvents)
+            .calledOnce
+            .calledWith('2017w12')
+
+          expect(databaseAdapter.update).to.not.have.been.called.at.least(1)
         })
     })
   })
