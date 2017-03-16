@@ -1,6 +1,6 @@
 {
   "name": "izone",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Izone time reporting with Google Calendar",
   "main": "index.js",
   "bin": {
