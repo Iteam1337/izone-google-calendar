@@ -3,24 +3,32 @@
 const cli = require('./lib/cli')
 
 let exitCode = 0
-const _command = process.argv[2]
+let _command = process.argv[2]
 
 if (!_command) {
-  console.error('No command specified.')
-  process.exit(1)
+  _command = 'summary'
 }
 
 const r = () => {
   switch (_command) {
-    /*
-     * Lists new hours and matching izone job.
+    /**
+     * Save time entries to izone db.
      */
     case 'import':
       return cli.import(process.argv[3])
+
+    /**
+     * List all time entries from google calendar and izone db.
+     */
     case 'ls':
       return cli.ls(process.argv[3])
+
+    /**
+     * Show a summary of time spent.
+     */
     case 'summary':
       return cli.summary(process.argv[3])
+
     default:
       return Promise.reject(new Error((`Command '${_command}' is not declared.`)))
   }
