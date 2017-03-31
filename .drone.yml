@@ -2,7 +2,7 @@ pipeline:
   test:
     image: node:7
     commands:
-      - npm install > /dev/null
+      - npm i > ./_build.log 2>&1
       - npm run test
   docker:
     image: plugins/docker
