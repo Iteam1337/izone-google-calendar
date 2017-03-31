@@ -16,7 +16,13 @@ app.get('/', (req, res, next) => {
 app.post('/slack/summary/:week', (req, res, next) => {
   console.log('body', req.body)
   console.log('params', req.params)
-  res.send('meow')
+  res.send('week summary')
+})
+
+app.post('/slack/list/:week', (req, res, next) => {
+  console.log('body', req.body)
+  console.log('params', req.params)
+  res.send('week list')
 })
 
 const port = process.env.PORT || 3000
