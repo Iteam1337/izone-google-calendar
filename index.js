@@ -5,6 +5,7 @@ const restify = require('restify')
 const app = restify.createServer({})
 app.pre(restify.pre.sanitizePath())
 app.use(restify.CORS())
+app.use(restify.bodyParser())
 app.use(restify.queryParser())
 
 app.get('/', (req, res, next) => {
@@ -12,7 +13,7 @@ app.get('/', (req, res, next) => {
   res.end(`izone ${version}`)
 })
 
-app.post('/izone/summary', (req, res, next) => {
+app.post('/slack/summary/:week', (req, res, next) => {
   console.log('body', req.body)
   console.log('params', req.params)
   res.send('meow')
