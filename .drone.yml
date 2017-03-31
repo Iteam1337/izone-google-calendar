@@ -1,0 +1,15 @@
+pipeline:
+  test:
+    image: node:7
+    commands:
+      - npm install
+      - npm run test
+  docker:
+    image: plugins/docker
+    repo: iteam1337/izone
+    username: ilix
+    password: ${DOCKER_PASS}
+    email: src@ilix.se
+    tags: latest
+    build_args:
+     - A_VAR=${SOME_VALUE}

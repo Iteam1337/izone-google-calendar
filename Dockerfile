@@ -1,10 +1,10 @@
-FROM node:stable
+FROM node:7
 WORKDIR /i
 
-ADD ./package.json
+ADD ./package.json package.json
 RUN npm install
 
-ADD ./index.js
-ADD ./lib
+ADD ./index.js index.js
+ADD ./lib lib
 
 CMD node index.js
