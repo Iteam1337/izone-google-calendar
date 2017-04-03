@@ -1,5 +1,6 @@
 'use strict'
 
+const izoneService = require('./lib/services/izone')
 const restify = require('restify')
 
 const app = restify.createServer({})
@@ -13,13 +14,17 @@ app.get('/', (req, res, next) => {
   res.end(`izone ${version}`)
 })
 
-app.post('/slack/summary/:week', (req, res, next) => {
+app.post('/slack/summary', (req, res, next) => {
   console.log('body', req.body)
   console.log('params', req.params)
-  res.send('week summary')
+  return izoneService.getWeekSummary('2017w14')
+    .then(summary => {
+      res.send(summary)
+      next()
+    })
 })
 
-app.post('/slack/list/:week', (req, res, next) => {
+app.post('/slack/list', (req, res, next) => {
   console.log('body', req.body)
   console.log('params', req.params)
   res.send('week list')
