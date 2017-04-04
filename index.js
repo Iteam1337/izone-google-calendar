@@ -17,6 +17,7 @@ app.get('/', (req, res, next) => {
 app.post('/slack/summary', (req, res, next) => {
   console.log('body', req.body)
   console.log('params', req.params)
+  getParams(req.params.command)
   const week = '2017w14'
   return izoneService.getWeekSummary(week)
     .then(summary => {
@@ -26,7 +27,9 @@ app.post('/slack/summary', (req, res, next) => {
       response.text = `Summary for ${week}`
 
       for (let hour in summary.hours) {
-        response.attachments.push(`${hour}: ${summary.hours[hour].hours} h`)
+        response.attachments.push({
+          text: `${hour}: ${summary.hours[hour].hours} h`
+        })
       }
 
       res.send(response)
@@ -44,3 +47,19 @@ const port = process.env.PORT || 3000
 app.listen(port, () => {
   console.log('listening on', port)
 })
+
+/**
+ * Helpers.
+ */
+function getParams (command) {
+  const commandParams = command.split(' ').splice(0, 1)
+  const params = {}
+
+  commandParams.forEach(param => {
+    console.log(param)
+  })
+
+  if (command.indexOf('--week=')) {
+    //console.log(command.substr(command.indexOf('--week=')))
+  }
+}
