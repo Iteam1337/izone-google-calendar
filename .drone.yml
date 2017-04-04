@@ -13,3 +13,10 @@ pipeline:
     tags: latest
     build_args:
      - A_VAR=${SOME_VALUE}
+  deploy:
+    rancher:
+      url: https://rancher.iteam.life
+      access_key: ${RANCHER_ACCESS_KEY}
+      secret_key: ${RANCHER_SECRET_KEY}
+      service: Izone/izone-rest
+      docker_image: iteam1337/izone:latest
