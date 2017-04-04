@@ -14,6 +14,7 @@ pipeline:
     build_args:
      - A_VAR=${SOME_VALUE}
   rancher:
+    image: peloton/drone-rancher
     url: https://rancher.iteam.life
     access_key: ${RANCHER_ACCESS_KEY}
     secret_key: ${RANCHER_SECRET_KEY}
