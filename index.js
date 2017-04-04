@@ -19,7 +19,13 @@ app.post('/slack/summary', (req, res, next) => {
   console.log('params', req.params)
   return izoneService.getWeekSummary('2017w14')
     .then(summary => {
-      res.send(summary)
+      let message = 'Your hours\n\n'
+
+      for (let hour in summary.hours) {
+        message += `${hour}: ${summary.hours[hour].hours}\n`
+      }
+
+      res.send(message)
       next()
     })
 })
