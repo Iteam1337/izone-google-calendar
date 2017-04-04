@@ -1,6 +1,7 @@
 'use strict'
 
 const cli = require('./lib/cli')
+const google = require('./lib/adapters/google')
 
 let exitCode = 0
 let _command = process.argv[2]
@@ -15,19 +16,22 @@ const r = () => {
      * Save time entries to izone db.
      */
     case 'import':
-      return cli.import(process.argv[3])
+      return google.checkConfiguration()
+        .then(() => cli.import(process.argv[3]))
 
     /**
      * List all time entries from google calendar and izone db.
      */
     case 'ls':
-      return cli.ls(process.argv[3])
+      return google.checkConfiguration()
+        .then(() => cli.ls(process.argv[3]))
 
     /**
      * Show a summary of time spent.
      */
     case 'summary':
-      return cli.summary(process.argv[3])
+      return google.checkConfiguration()
+        .then(() => cli.summary(process.argv[3]))
 
     default:
       return Promise.reject(new Error((`Command '${_command}' is not declared.`)))
