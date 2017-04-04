@@ -17,15 +17,19 @@ app.get('/', (req, res, next) => {
 app.post('/slack/summary', (req, res, next) => {
   console.log('body', req.body)
   console.log('params', req.params)
-  return izoneService.getWeekSummary('2017w14')
+  const week = '2017w14'
+  return izoneService.getWeekSummary(week)
     .then(summary => {
-      let message = 'Your hours<br><br>'
+      const response = {
+        attachments: []
+      }
+      response.text = `Summary for ${week}`
 
       for (let hour in summary.hours) {
-        message += `${hour}: ${summary.hours[hour].hours}<br>`
+        response.attachments.push(`${hour}: ${summary.hours[hour].hours} h`)
       }
 
-      res.send(message)
+      res.send(response)
       next()
     })
 })
