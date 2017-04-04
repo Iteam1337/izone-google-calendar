@@ -20,3 +20,4 @@ pipeline:
     secret_key: ${RANCHER_SECRET_KEY}
     service: Izone/izone-rest
     docker_image: iteam1337/izone:latest
+    confirm: true
