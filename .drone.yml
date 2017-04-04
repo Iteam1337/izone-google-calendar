@@ -21,3 +21,4 @@ pipeline:
     service: Izone/izone-rest
     docker_image: iteam1337/izone:latest
     confirm: true
+    timeout: 120
