@@ -34,6 +34,21 @@ app.post('/slack/summary', (req, res, next) => {
         })
       }
 
+      response.actions = [
+        {
+          "name": "import",
+          "text": "Import hours",
+          "type": "button",
+          "value": "import"
+        },
+        {
+          "name": "tenk",
+          "text": "View 10 000'",
+          "type": "button",
+          "value": "tenk"
+        }
+      ]
+
       res.send(response)
       next()
     })
