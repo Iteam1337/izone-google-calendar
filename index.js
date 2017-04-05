@@ -2,6 +2,7 @@
 
 const izoneService = require('./lib/services/izone')
 const restify = require('restify')
+const weekHelper = require('./lib/helpers/weekHelper')
 
 const app = restify.createServer({})
 app.pre(restify.pre.sanitizePath())
@@ -15,17 +16,17 @@ app.get('/', (req, res, next) => {
 })
 
 app.post('/slack/summary', (req, res, next) => {
-  console.log('body', req.body)
-  console.log('params', req.params)
-  const parsedParameters = parseParameters(req.params.command)
-  console.log(parsedParameters)
-  const week = '2017w14'
-  return izoneService.getWeekSummary(week)
+  const parameters = parseParameters(req.params.text)
+  if (!parameters.week) {
+    parameters.week = weekHelper.getWeekForDate(new Date())
+  }
+
+  return izoneService.getWeekSummary(parameters.week)
     .then(summary => {
       const response = {
         attachments: []
       }
-      response.text = `Summary for ${week}`
+      response.text = `Summary for ${parameters.week}`
 
       for (let hour in summary.hours) {
         response.attachments.push({
@@ -57,14 +58,15 @@ function parseParameters (command) {
   const params = {}
 
   commandParams.forEach(param => {
-    params.week = parseParameter('week', param)
+    params.week = parseParameter('week', param) || params.week
   })
 
   return params
 }
 
 function parseParameter (name, raw) {
-  if (raw.indexOf(`--${name}=`) > -1) {
-    return raw.substr(`--${name}=`.length)
+  const pattern = `${name}=`
+  if (raw.indexOf(pattern) > -1) {
+    return raw.substr(pattern.length)
   }
 }
