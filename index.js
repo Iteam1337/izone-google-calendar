@@ -30,14 +30,15 @@ app.post('/slack', (req, res, next) => {
 
       for (let hour in summary.hours) {
         response.attachments.push({
+          color: 'good',
           text: `${hour}: ${summary.hours[hour].hours} h`
         })
       }
 
       response.attachments.push({
         text: 'Buttons!',
-        fallback: 'You are unable to choose a game',
-        callback_id: 'wopr_game',
+        fallback: '',
+        callback_id: 'izone_buttons',
         color: '#3AA3E3',
         attachment_type: 'default',
         actions: [
