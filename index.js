@@ -34,20 +34,27 @@ app.post('/slack', (req, res, next) => {
         })
       }
 
-      response.actions = [
-        {
-          "name": "import",
-          "text": "Import hours",
-          "type": "button",
-          "value": "import"
-        },
-        {
-          "name": "tenk",
-          "text": "View 10 000'",
-          "type": "button",
-          "value": "tenk"
-        }
-      ]
+      response.attachments.push({
+        text: 'Buttons!',
+        fallback: 'You are unable to choose a game',
+        callback_id: 'wopr_game',
+        color: '#3AA3E3',
+        attachment_type: 'default',
+        actions: [
+          {
+            "name": "import",
+            "text": "Import hours",
+            "type": "button",
+            "value": "import"
+          },
+          {
+            "name": "tenk",
+            "text": "View 10 000'",
+            "type": "button",
+            "value": "tenk"
+          }
+        ]
+      })
 
       res.send(response)
       next()
