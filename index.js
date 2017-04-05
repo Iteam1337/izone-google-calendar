@@ -15,7 +15,7 @@ app.get('/', (req, res, next) => {
   res.end(`izone ${version}`)
 })
 
-app.post('/slack/summary', (req, res, next) => {
+app.post('/slack', (req, res, next) => {
   const parameters = parseParameters(req.params.text)
   if (!parameters.week) {
     parameters.week = weekHelper.getWeekForDate(new Date())
@@ -54,7 +54,9 @@ app.post('/slack/summary', (req, res, next) => {
     })
 })
 
-app.post('/slack/list', (req, res, next) => {
+app.post('/slack/button', (req, res, next) => {
+  console.log('')
+  console.log('Yey! A button was pressed!')
   console.log('body', req.body)
   console.log('params', req.params)
   res.send('week list')
