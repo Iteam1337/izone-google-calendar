@@ -11,7 +11,7 @@ chai.use(require('sinon-chai'))
 describe('rest api', () => {
   let route
   let req, res, next
-  let izoneService, slackService
+  let izoneService, request, slackService
 
   beforeEach(() => {
     req = {
@@ -28,19 +28,20 @@ describe('rest api', () => {
       getAllEvents: stub().resolves()
     }
 
+    request = stub().resolves()
+
     slackService = {
       summary: stub().resolves()
     }
 
     route = proxyquire(process.cwd() + '/lib/routes/slack', {
       '../services/izone': izoneService,
+      'request': request,
       '../services/slack': slackService
     })
   })
 
   describe('POST /slack', () => {
-    let parameters = {}
-
     beforeEach(() => {
       req.params = {
         payload: JSON.stringify({})
@@ -50,15 +51,12 @@ describe('rest api', () => {
     it('calls slackService', () => {
       return route.summary(req, res, next)
         .then(() => {
-          expect(slackService.summary)
-            .calledOnce
+          expect(slackService.summary).callCount(1)
         })
     })
   })
 
   describe('POST /slack/import', () => {
-    let parameters = {}
-
     beforeEach(() => {
       req.params = {
         payload: JSON.stringify({
@@ -71,11 +69,13 @@ describe('rest api', () => {
       })
     })
 
-    it('calls slackService', () => {
+    it('calls izone service', () => {
+      req.params = {
+        payload: JSON.stringify({ response_url: 'http://izone.test' })
+      }
       return route.import(req, res, next)
         .then(() => {
-          expect(izoneService.getAllEvents)
-            .calledOnce
+          expect(izoneService.getAllEvents).callCount(1)
         })
     })
   })
