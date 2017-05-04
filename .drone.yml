@@ -15,7 +15,7 @@ pipeline:
      - A_VAR=${SOME_VALUE}
   rancher:
     image: peloton/drone-rancher
-    url: https://rancher.iteam.life
+    url: http://rancher.iteam.life:8080
     access_key: ${RANCHER_ACCESS_KEY}
     secret_key: ${RANCHER_SECRET_KEY}
     service: Izone/izone-rest
