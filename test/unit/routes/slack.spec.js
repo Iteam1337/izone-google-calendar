@@ -54,6 +54,22 @@ describe('rest api', () => {
           expect(slackService.summary).callCount(1)
         })
     })
+
+    it('marks time entries as "bad" if they are set to a non-existent alias', () => {
+      
+    })
+
+    it('marks time entries as "warning" if they only exist in calendar', () => {
+
+    })
+
+    it('marks time entries as "warning" if they exist both in calendar and izone and their time differ', () => {
+
+    })
+
+    it('marks time entries as "good" if they exist both in calendar and izone, and are synced', () => {
+      
+    })
   })
 
   describe('POST /slack/import', () => {
