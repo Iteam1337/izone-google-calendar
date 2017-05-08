@@ -39,11 +39,27 @@ describe('slack service', () => {
     })
 
     it('marks time entries as "bad" if they are set to a non-existent alias', () => {
-
+      // TODO: Implement test and code for this.
+      //       Basically, izoneService needs to figure out whether each alias used is valid or not.
     })
 
     it('marks time entries as "warning" if they only exist in calendar', () => {
+      const summary = {
+        hours: {}
+      }
 
+      summary.hours['meow'] = {
+        hours: 1,
+        source: 'google'
+      }
+
+      izoneService.getWeekSummary = stub().resolves(summary)
+
+      return service.summary(parameters)
+        .then(data => {
+          expect(data.attachments[0].color).to.eql('warning')
+          expect(data.attachments[0].text).to.eql('meow: 1 h')
+        })
     })
 
     it('marks time entries as "warning" if they exist both in calendar and izone and their time differ', () => {
