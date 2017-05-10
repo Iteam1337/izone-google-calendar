@@ -20,7 +20,7 @@ describe('izone service', () => {
             jl_alias: 'iteam:',
             job_title: 'Iteam code writing',
             jl_starttime: '2017-01-27T16:00:00+01:00',
-            jl_endtime: '2017-01-27T16:00:00+01:00'
+            jl_endtime: '2017-01-27T18:00:00+01:00'
           }
         ]
       ),
@@ -30,7 +30,7 @@ describe('izone service', () => {
           p_emal: 'mew@iteam.se',
           p_firstname: 'mew',
           p_lastname: 'kitteh',
-          p_title: 'Office Cat'
+          p_title: 'Official Office Cat'
         }
       ])
     }
@@ -49,7 +49,7 @@ describe('izone service', () => {
               dateTime: '2017-01-27T16:00:00+01:00'
             },
             end: {
-              dateTime: '2017-01-27T16:00:00+01:00'
+              dateTime: '2017-01-27T18:00:00+01:00'
             }
           }
         ]
@@ -98,6 +98,15 @@ describe('izone service', () => {
           expect(databaseAdapter.getPerson)
             .calledOnce
             .calledWith('mew@iteam.se')
+        })
+    })
+  })
+
+  describe('getWeekSummary()', () => {
+    it.only('sets hour status to "ok" if time entry is imported and synced', () => {
+      return service.getWeekSummary('2017w10')
+        .then(data => {
+          console.log('data', data)
         })
     })
   })
