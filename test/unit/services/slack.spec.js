@@ -26,9 +26,11 @@ describe('slack service', () => {
 
   describe('summary()', () => {
     const parameters = {}
+    const summary = {}
 
     beforeEach(() => {
       parameters.week = '2017w01'
+      summary.hours = {}
     })
 
     it('calls izoneService', () => {
@@ -39,18 +41,24 @@ describe('slack service', () => {
     })
 
     it('marks time entries as "bad" if they are set to a non-existent alias', () => {
-      // TODO: Implement test and code for this.
-      //       Basically, izoneService needs to figure out whether each alias used is valid or not.
-    })
-
-    it('marks time entries as "warning" if they only exist in calendar', () => {
-      const summary = {
-        hours: {}
+      summary.hours['rawr'] = {
+        hours: 1,
+        status: 'error'
       }
 
+      izoneService.getWeekSummary = stub().resolves(summary)
+
+      return service.summary(parameters)
+        .then(data => {
+          expect(data.attachments[0].color).to.eql('bad')
+          expect(data.attachments[0].text).to.eql('rawr: 1 h')
+        })
+    })
+
+    it('marks time entries as "warning" if their status is "dirty"', () => {
       summary.hours['meow'] = {
         hours: 1,
-        source: 'google'
+        status: 'dirty'
       }
 
       izoneService.getWeekSummary = stub().resolves(summary)
@@ -62,12 +70,19 @@ describe('slack service', () => {
         })
     })
 
-    it('marks time entries as "warning" if they exist both in calendar and izone and their time differ', () => {
+    it('marks time entries as "good" if their status is "ok"', () => {
+      summary.hours['meow'] = {
+        hours: 3,
+        status: 'ok'
+      }
 
-    })
+      izoneService.getWeekSummary = stub().resolves(summary)
 
-    it('marks time entries as "good" if they exist both in calendar and izone, and are synced', () => {
-
+      return service.summary(parameters)
+        .then(data => {
+          expect(data.attachments[0].color).to.eql('good')
+          expect(data.attachments[0].text).to.eql('meow: 3 h')
+        })
     })
   })
 })
