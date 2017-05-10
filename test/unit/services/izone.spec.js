@@ -103,10 +103,111 @@ describe('izone service', () => {
   })
 
   describe('getWeekSummary()', () => {
-    it.only('sets hour status to "ok" if time entry is imported and synced', () => {
+    /**
+     * Ensure that an unchanged time entry is considered OK.
+     */
+    it('sets hour status to "ok" if time entry is imported and synced', () => {
+      const alias = 'purr'
+      databaseAdapter.getJobLogs = stub().resolves(
+        [
+          {
+            jl_alias: `${alias}:`,
+            job_title: 'purring all day long',
+            jl_starttime: '2017-01-27T16:00:00+01:00',
+            jl_endtime: '2017-01-27T18:00:00+01:00'
+          }
+        ]
+      )
+
+      googleAdapter.getEvents = stub().resolves(
+        [
+          {
+            summary: `${alias}: purring all day long`,
+            start: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T18:00:00+01:00'
+            }
+          }
+        ]
+      )
+
       return service.getWeekSummary('2017w10')
         .then(data => {
-          console.log('data', data)
+          expect(data.hours[`${alias}:`].status).equals('ok')
+        })
+    })
+
+    /**
+     * Ensure that a change in a time entry's duration is detected.
+     */
+    it('sets hour status to "warning" if time entry duration differs', () => {
+      const alias = 'rawr'
+      databaseAdapter.getJobLogs = stub().resolves(
+        [
+          {
+            jl_alias: `${alias}:`,
+            job_title: '=^_^=',
+            jl_starttime: '2017-01-27T11:00:00+01:00',
+            jl_endtime: '2017-01-27T12:00:00+01:00'
+          }
+        ]
+      )
+
+      googleAdapter.getEvents = stub().resolves(
+        [
+          {
+            summary: `${alias}: =^_^=`,
+            start: {
+              dateTime: '2017-01-27T11:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T13:00:00+01:00' // <-- different.
+            }
+          }
+        ]
+      )
+
+      return service.getWeekSummary('2017w10')
+        .then(data => {
+          expect(data.hours[`${alias}:`].status).equals('warning')
+        })
+    })
+
+    /**
+     * Ensure that a change in a time entry's summary is detected.
+     */
+    it('sets hour status to "warning" if time entry summary differs', () => {
+      const alias = 'rawr'
+      databaseAdapter.getJobLogs = stub().resolves(
+        [
+          {
+            jl_alias: `${alias}:`,
+            job_title: '=^_^=',
+            jl_starttime: '2017-01-27T16:00:00+01:00',
+            jl_endtime: '2017-01-27T18:00:00+01:00'
+          }
+        ]
+      )
+
+      googleAdapter.getEvents = stub().resolves(
+        [
+          {
+            summary: `${alias}: >_<`,
+            start: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T18:00:00+01:00'
+            }
+          }
+        ]
+      )
+
+      return service.getWeekSummary('2017w10')
+        .then(data => {
+          expect(data.hours[`${alias}:`].status).equals('warning')
         })
     })
   })
