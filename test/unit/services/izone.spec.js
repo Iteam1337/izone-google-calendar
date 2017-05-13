@@ -141,6 +141,43 @@ describe('izone service', () => {
     })
 
     /**
+     * Ensure that a change in a time entry's start time is detected.
+     */
+    it('sets hour status to "warning" if time entry start time differs', () => {
+      const alias = 'rawr'
+      databaseAdapter.getJobLogs = stub().resolves(
+        [
+          {
+            jl_alias: `${alias}:`,
+            jl_description: '=^_^=',
+            jl_starttime: '2017-01-27T10:00:00+01:00',
+            jl_endtime: '2017-01-27T12:00:00+01:00',
+            jl_hours: 2
+          }
+        ]
+      )
+
+      googleAdapter.getEvents = stub().resolves(
+        [
+          {
+            summary: `${alias}: =^_^=`,
+            start: {
+              dateTime: '2017-01-27T11:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T13:00:00+01:00'
+            }
+          }
+        ]
+      )
+
+      return service.getWeekSummary('2017w10')
+        .then(data => {
+          expect(data.hours[`${alias}:`].status).equals('warning')
+        })
+    })
+
+    /**
      * Ensure that a change in a time entry's duration is detected.
      */
     it('sets hour status to "warning" if time entry duration differs', () => {
