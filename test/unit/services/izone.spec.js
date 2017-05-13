@@ -112,9 +112,10 @@ describe('izone service', () => {
         [
           {
             jl_alias: `${alias}:`,
-            job_title: 'purring all day long',
+            jl_description: 'purring all day long',
             jl_starttime: '2017-01-27T16:00:00+01:00',
-            jl_endtime: '2017-01-27T18:00:00+01:00'
+            jl_endtime: '2017-01-27T18:00:00+01:00',
+            jl_hours: 2
           }
         ]
       )
@@ -148,9 +149,10 @@ describe('izone service', () => {
         [
           {
             jl_alias: `${alias}:`,
-            job_title: '=^_^=',
+            jl_description: '=^_^=',
             jl_starttime: '2017-01-27T11:00:00+01:00',
-            jl_endtime: '2017-01-27T12:00:00+01:00'
+            jl_endtime: '2017-01-27T12:00:00+01:00',
+            jl_hours: 1
           }
         ]
       )
@@ -184,9 +186,10 @@ describe('izone service', () => {
         [
           {
             jl_alias: `${alias}:`,
-            job_title: '=^_^=',
+            jl_description: '=^_^=',
             jl_starttime: '2017-01-27T16:00:00+01:00',
-            jl_endtime: '2017-01-27T18:00:00+01:00'
+            jl_endtime: '2017-01-27T18:00:00+01:00',
+            jl_hours: 2
           }
         ]
       )
@@ -208,6 +211,43 @@ describe('izone service', () => {
       return service.getWeekSummary('2017w10')
         .then(data => {
           expect(data.hours[`${alias}:`].status).equals('warning')
+        })
+    })
+
+    /**
+     * Ensure that a change in a time entry's alias is detected.
+     */
+    it('sets hour status to "error" if time entry alias differs', () => {
+      databaseAdapter.getJobLogs = stub().resolves(
+        [
+          {
+            jl_alias: 'meow:',
+            jl_description: '=^_^=',
+            jl_starttime: '2017-01-27T16:00:00+01:00',
+            jl_endtime: '2017-01-27T18:00:00+01:00',
+            jl_hours: 2
+          }
+        ]
+      )
+
+      googleAdapter.getEvents = stub().resolves(
+        [
+          {
+            summary: 'purr: =^_^=',
+            start: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T18:00:00+01:00'
+            }
+          }
+        ]
+      )
+
+      return service.getWeekSummary('2017w10')
+        .then(data => {
+          expect(data.hours['meow:'].status).equals('error')
+          expect(data.hours['purr:']).equals(undefined)
         })
     })
   })
