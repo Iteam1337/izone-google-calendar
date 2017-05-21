@@ -11,8 +11,6 @@ pipeline:
     password: ${DOCKER_PASS}
     email: src@ilix.se
     tags: latest
-    build_args:
-     - A_VAR=${SOME_VALUE}
   rancher:
     image: peloton/drone-rancher
     url: http://rancher.iteam.life:8080
