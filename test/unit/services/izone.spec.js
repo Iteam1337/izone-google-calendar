@@ -288,4 +288,31 @@ describe('izone service', () => {
         })
     })
   })
+
+  /**
+   * Ensure that an unimported entry is 'warning'.
+   */
+  it('sets hour status to "warning" if time entry is not imported', () => {
+    databaseAdapter.getJobLogs = stub().resolves([])
+
+    googleAdapter.getEvents = stub().resolves(
+      [
+        {
+          id: 'meowmeowmeow',
+          summary: 'purr: =^_^=',
+          start: {
+            dateTime: '2017-01-27T16:00:00+01:00'
+          },
+          end: {
+            dateTime: '2017-01-27T18:00:00+01:00'
+          }
+        }
+      ]
+    )
+
+    return service.getWeekSummary('2017w10')
+      .then(data => {
+        expect(data.hours['purr:'].status).equals('warning')
+      })
+  })
 })
