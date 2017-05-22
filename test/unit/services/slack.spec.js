@@ -40,7 +40,7 @@ describe('slack service', () => {
         })
     })
 
-    it('marks time entries as "bad" if they are set to a non-existent alias', () => {
+    it('marks time entries as "danger" if they are set to a non-existent alias', () => {
       summary.hours['rawr'] = {
         hours: 1,
         status: 'error'
@@ -50,7 +50,7 @@ describe('slack service', () => {
 
       return service.summary(parameters)
         .then(data => {
-          expect(data.attachments[0].color).to.eql('bad')
+          expect(data.attachments[0].color).to.eql('danger')
           expect(data.attachments[0].text).to.eql('rawr: 1 h')
         })
     })
