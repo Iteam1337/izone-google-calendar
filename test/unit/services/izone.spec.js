@@ -115,7 +115,8 @@ describe('izone service', () => {
             jl_description: 'purring all day long',
             jl_starttime: '2017-01-27T16:00:00+01:00',
             jl_endtime: '2017-01-27T18:00:00+01:00',
-            jl_hours: 2
+            jl_hours: 2,
+            jl_gcal_id: 'meowmeowmeow'
           }
         ]
       )
@@ -123,6 +124,7 @@ describe('izone service', () => {
       googleAdapter.getEvents = stub().resolves(
         [
           {
+            id: 'meowmeowmeow',
             summary: `${alias}: purring all day long`,
             start: {
               dateTime: '2017-01-27T16:00:00+01:00'
