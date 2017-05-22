@@ -55,10 +55,10 @@ describe('slack service', () => {
         })
     })
 
-    it('marks time entries as "warning" if their status is "dirty"', () => {
+    it('marks time entries as "warning" if their status is "warning"', () => {
       summary.hours['meow'] = {
         hours: 1,
-        status: 'dirty'
+        status: 'warning'
       }
 
       izoneService.getWeekSummary = stub().resolves(summary)
