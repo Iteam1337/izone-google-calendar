@@ -111,7 +111,7 @@ describe('izone service', () => {
       databaseAdapter.getJobLogs = stub().resolves(
         [
           {
-            jl_alias: `${alias}:`,
+            jl_alias: alias,
             jl_description: 'purring all day long',
             jl_starttime: '2017-01-27T16:00:00+01:00',
             jl_endtime: '2017-01-27T18:00:00+01:00',
@@ -138,7 +138,7 @@ describe('izone service', () => {
 
       return service.getWeekSummary('2017w10')
         .then(data => {
-          expect(data.hours[`${alias}:`].status).equals('ok')
+          expect(data.hours[`${alias}`].status).equals('ok')
         })
     })
 
@@ -150,7 +150,7 @@ describe('izone service', () => {
       databaseAdapter.getJobLogs = stub().resolves(
         [
           {
-            jl_alias: `${alias}:`,
+            jl_alias: alias,
             jl_description: '=^_^=',
             jl_starttime: '2017-01-27T10:00:00+01:00',
             jl_endtime: '2017-01-27T12:00:00+01:00',
@@ -175,7 +175,7 @@ describe('izone service', () => {
 
       return service.getWeekSummary('2017w10')
         .then(data => {
-          expect(data.hours[`${alias}:`].status).equals('warning')
+          expect(data.hours[`${alias}`].status).equals('warning')
         })
     })
 
@@ -187,7 +187,7 @@ describe('izone service', () => {
       databaseAdapter.getJobLogs = stub().resolves(
         [
           {
-            jl_alias: `${alias}:`,
+            jl_alias: alias,
             jl_description: '=^_^=',
             jl_starttime: '2017-01-27T11:00:00+01:00',
             jl_endtime: '2017-01-27T12:00:00+01:00',
@@ -212,7 +212,7 @@ describe('izone service', () => {
 
       return service.getWeekSummary('2017w10')
         .then(data => {
-          expect(data.hours[`${alias}:`].status).equals('warning')
+          expect(data.hours[`${alias}`].status).equals('warning')
         })
     })
 
@@ -224,7 +224,7 @@ describe('izone service', () => {
       databaseAdapter.getJobLogs = stub().resolves(
         [
           {
-            jl_alias: `${alias}:`,
+            jl_alias: alias,
             jl_description: '=^_^=',
             jl_starttime: '2017-01-27T16:00:00+01:00',
             jl_endtime: '2017-01-27T18:00:00+01:00',
@@ -249,7 +249,7 @@ describe('izone service', () => {
 
       return service.getWeekSummary('2017w10')
         .then(data => {
-          expect(data.hours[`${alias}:`].status).equals('warning')
+          expect(data.hours[`${alias}`].status).equals('warning')
         })
     })
 
@@ -260,7 +260,7 @@ describe('izone service', () => {
       databaseAdapter.getJobLogs = stub().resolves(
         [
           {
-            jl_alias: 'meow:',
+            jl_alias: 'meow',
             jl_description: '=^_^=',
             jl_starttime: '2017-01-27T16:00:00+01:00',
             jl_endtime: '2017-01-27T18:00:00+01:00',
@@ -285,8 +285,9 @@ describe('izone service', () => {
 
       return service.getWeekSummary('2017w10')
         .then(data => {
-          expect(data.hours['meow:'].status).equals('error')
-          expect(data.hours['purr:']).equals(undefined)
+          console.log(data.hours)
+          expect(data.hours['meow'].status).equals('error')
+          expect(data.hours['purr']).equals(undefined)
         })
     })
   })
@@ -314,7 +315,7 @@ describe('izone service', () => {
 
     return service.getWeekSummary('2017w10')
       .then(data => {
-        expect(data.hours['purr:'].status).equals('warning')
+        expect(data.hours['purr'].status).equals('warning')
       })
   })
 })
