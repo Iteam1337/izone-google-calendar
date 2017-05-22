@@ -142,6 +142,42 @@ describe('izone service', () => {
         })
     })
 
+    it('sets hour status to "ok" if time entry is imported and synced even if description is empty', () => {
+      const alias = 'mjao'
+      databaseAdapter.getJobLogs = stub().resolves(
+        [
+          {
+            jl_alias: alias,
+            jl_description: '',
+            jl_starttime: '2017-01-27T16:00:00+01:00',
+            jl_endtime: '2017-01-27T18:00:00+01:00',
+            jl_hours: 2,
+            jl_gcal_id: 'meowmeowmeow'
+          }
+        ]
+      )
+
+      googleAdapter.getEvents = stub().resolves(
+        [
+          {
+            id: 'meowmeowmeow',
+            summary: `${alias}:`,
+            start: {
+              dateTime: '2017-01-27T16:00:00+01:00'
+            },
+            end: {
+              dateTime: '2017-01-27T18:00:00+01:00'
+            }
+          }
+        ]
+      )
+
+      return service.getWeekSummary('2017w10')
+        .then(data => {
+          expect(data.hours[`${alias}`].status).equals('ok')
+        })
+    })
+
     /**
      * Ensure that a change in a time entry's start time is detected.
      */
