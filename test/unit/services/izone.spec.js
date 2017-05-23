@@ -148,7 +148,7 @@ describe('izone service', () => {
         [
           {
             jl_alias: alias,
-            jl_description: '',
+            jl_description: undefined,
             jl_starttime: '2017-01-27T16:00:00+01:00',
             jl_endtime: '2017-01-27T18:00:00+01:00',
             jl_hours: 2,
