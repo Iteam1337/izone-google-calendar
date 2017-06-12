@@ -132,7 +132,7 @@ describe('command line interface', () => {
         })
     })
 
-    xit('updates events whose description has been changed in google calendar', () => {
+    it('updates events whose description has been changed in google calendar', () => {
       return cli.import('2017w11')
         .then(() => {
           expect(izoneService.getAllEvents)
