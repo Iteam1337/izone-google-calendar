@@ -357,7 +357,6 @@ describe('izone service', () => {
 
       return service.getWeekSummary('2017w10')
         .then(data => {
-          console.log(data.hours)
           expect(data.hours['meow'].status).equals('error')
           expect(data.hours['purr']).equals(undefined)
         })
