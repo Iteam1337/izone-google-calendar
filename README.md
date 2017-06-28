@@ -1,5 +1,7 @@
 # izone-google-calendar
 
+This project will be deprecated soon in favor of izone-core-api.
+
 ## Setup
 
 ```
