@@ -143,9 +143,9 @@ describe('command line interface', () => {
             .calledOnce
             .calledWith('=^..^=', {
               jl_description: 'Writing some code',
-              jl_starttime: '2017-01-27 16:00:00',
               jl_endtime: '2017-01-27 17:00:00',
-              jl_hours: 1
+              jl_hours: 1,
+              jl_starttime: '2017-01-27 16:00:00'
             })
         })
     })
