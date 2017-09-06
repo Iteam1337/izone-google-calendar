@@ -132,6 +132,7 @@ describe('command line interface', () => {
         })
     })
 
+    // Does not work in drone(?).
     xit('updates events whose description has been changed in google calendar', () => {
       return cli.import('2017w11')
         .then(() => {
