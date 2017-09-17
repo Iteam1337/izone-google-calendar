@@ -6,7 +6,6 @@ const expect = chai.expect
 const helper = require(process.cwd() + '/lib/helpers/aliasHelper')
 
 describe('aliasHelper', () => {
-
   const theories = [
     {
       input: '',
