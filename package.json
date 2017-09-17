@@ -6,12 +6,18 @@
   "bin": {
     "izone": "bin/izone.js"
   },
+  "watch": {
+    "standard": "{bin,lib,test}/**/*.js",
+    "test": "{bin,lib,test}/**/*.js"
+  },
   "scripts": {
     "test": "mocha ./test --recursive",
     "standard": "node_modules/standard/bin/cmd.js | node_modules/snazzy/bin/cmd.js",
     "patch": "npm version patch && npm publish && git push origin master --follow-tags",
     "minor": "npm version minor && npm publish && git push origin master --follow-tags",
-    "major": "npm version major && npm publish && git push origin master --follow-tags"
+    "major": "npm version major && npm publish && git push origin master --follow-tags",
+    "watch_standard": "npm-watch standard",
+    "watch_test": "npm-watch test"
   },
   "repository": {
     "type": "git",
@@ -41,6 +47,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
+    "npm-watch": "^0.2.0",
     "proxyquire": "^1.7.11",
     "sinon": "^1.17.7",
     "sinon-as-promised": "^4.0.2",
