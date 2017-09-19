@@ -7,12 +7,15 @@
     "izone": "bin/izone.js"
   },
   "watch": {
-    "standard": "{bin,lib,test}/**/*.js",
-    "test": "{bin,lib,test}/**/*.js"
+    "server": "lib/**/*.js",
+    "standard": "{lib,test}/**/*.js",
+    "test": "{lib,test}/**/*.js"
   },
   "scripts": {
+    "server": "node index.js",
     "standard": "node_modules/standard/bin/cmd.js | node_modules/snazzy/bin/cmd.js",
     "test": "mocha ./test --recursive",
+    "watch_server": "npm-watch server",
     "watch_standard": "npm-watch standard",
     "watch_test": "npm-watch test"
   },
