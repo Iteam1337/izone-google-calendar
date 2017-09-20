@@ -1,27 +1,27 @@
 {
-  "name": "izone",
+  "name": "izone-slack",
   "version": "0.0.10",
-  "description": "Izone time reporting with Google Calendar",
+  "description": "REST API for integrating izone functionality with Slack.",
   "main": "index.js",
   "bin": {
     "izone": "bin/izone.js"
   },
   "watch": {
-    "standard": "{bin,lib,test}/**/*.js",
-    "test": "{bin,lib,test}/**/*.js"
+    "server": "lib/**/*.js",
+    "standard": "{lib,test}/**/*.js",
+    "test": "{lib,test}/**/*.js"
   },
   "scripts": {
-    "test": "mocha ./test --recursive",
+    "server": "node index.js",
     "standard": "node_modules/standard/bin/cmd.js | node_modules/snazzy/bin/cmd.js",
-    "patch": "npm version patch && npm publish && git push origin master --follow-tags",
-    "minor": "npm version minor && npm publish && git push origin master --follow-tags",
-    "major": "npm version major && npm publish && git push origin master --follow-tags",
+    "test": "mocha ./test --recursive",
+    "watch_server": "npm-watch server",
     "watch_standard": "npm-watch standard",
     "watch_test": "npm-watch test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Iteam1337/izone-google-calendar.git"
+    "url": "git+https://github.com/Iteam1337/izone-slack.git"
   },
   "author": "Alexander Czigler <src@ilix.se>",
   "contributors": [
@@ -32,7 +32,7 @@
   ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Iteam1337/izone-google-calendar/issues"
+    "url": "https://github.com/Iteam1337/izone-slack/issues"
   },
   "homepage": "https://iteam.se",
   "dependencies": {
