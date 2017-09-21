@@ -285,6 +285,7 @@ describe('izone service', () => {
       return service.getWeekSummary('2017w10')
         .then(data => {
           expect(data.hours[`${alias}`].status).equals('warning')
+          expect(data.hours[`${alias}`].hours).equals(2)
         })
     })
 
