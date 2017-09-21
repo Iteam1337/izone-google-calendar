@@ -390,4 +390,31 @@ describe('izone service', () => {
         expect(data.hours['purr'].status).equals('warning')
       })
   })
+
+  /**
+   * Ensure that all-day events are treated as 8 hours.
+   */
+  it('sets hours to 8 if event is whole-day', () => {
+    databaseAdapter.getJobLogs = stub().resolves([])
+
+    googleAdapter.getEvents = stub().resolves(
+      [
+        {
+          id: 'meowmeowmeow',
+          summary: 'purr: =^_^=',
+          start: {
+            date: '2017-01-27'
+          },
+          end: {
+            date: '2017-01-28'
+          }
+        }
+      ]
+    )
+
+    return service.getWeekSummary('2017w10')
+      .then(data => {
+        expect(data.hours['purr'].hours).equals(8)
+      })
+  })
 })
