@@ -15,8 +15,8 @@ pipeline:
   redeploy_service:
     image: peloton/drone-rancher
     url: http://192.168.100.41:8080
-    access_key: ${RANCHER_ACCESS_KEY}
-    secret_key: ${RANCHER_SECRET_KEY}
+    access_key: ${RANCHER_KEY}
+    secret_key: ${RANCHER_SECRET}
     service: Izone/izone-rest
     docker_image: iteam1337/izone:latest
     confirm: true
