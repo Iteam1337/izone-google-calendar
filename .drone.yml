@@ -8,7 +8,7 @@ pipeline:
   publish_image:
     image: plugins/docker
     repo: iteam1337/izone
-    username:  ${DOCKER_USERNAME}
+    username:  ${DOCKER_USER}
     password: ${DOCKER_PASS}
     email:  ${DOCKER_EMAIL}
     tags: latest
