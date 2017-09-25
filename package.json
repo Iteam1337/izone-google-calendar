@@ -7,17 +7,29 @@
     "izone": "bin/izone.js"
   },
   "watch": {
-    "server": "lib/**/*.js",
-    "standard": "{lib,test}/**/*.js",
-    "test": "{lib,test}/**/*.js"
+    "standard": {
+      "patterns": ["lib", "test"],
+      "extensions": "js",
+      "ignore": "",
+      "quiet": false,
+      "legacyWatch": true,
+      "delay": 2500,
+      "inherit": true
+    },
+    "test": {
+      "patterns": ["lib", "test"],
+      "extensions": "js",
+      "ignore": "",
+      "quiet": false,
+      "legacyWatch": true,
+      "inherit": true
+    }
   },
   "scripts": {
-    "server": "node index.js",
+    "server": "nodemon index.js",
     "standard": "node_modules/standard/bin/cmd.js | node_modules/snazzy/bin/cmd.js",
     "test": "mocha ./test --recursive",
-    "watch_server": "npm-watch server",
-    "watch_standard": "npm-watch standard",
-    "watch_test": "npm-watch test"
+    "watch": "npm-watch"
   },
   "repository": {
     "type": "git",
