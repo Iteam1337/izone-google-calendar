@@ -8,25 +8,26 @@ The purpose of this API is to act as a relay between Google Calendar, Slack, 10 
 
 ### Running locally
 
+#### 1
+
 ```
 # Setup.
 nvm use
 npm i
-```
-While working you can run tests and standards check manually or using npm watch.
+npm i -g nodemon
 
 ```
-# Run scripts.
-npm run test
-npm run server
-npm run standard
+
+#### 2
+
+```
+# Run server.
+nodemon index.js
 ```
 
 ```
-# Run watches.
-npm run watch_test
-npm run watch_server
-npm run watch_standard
+# Run test/standard.
+npm run watch
 ```
 
 ### Contributing
