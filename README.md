@@ -1,6 +1,8 @@
-# izone-google-calendar
+# izone-slack
 
-This project will be deprecated soon in favor of izone-core-api.
+REST API for the "Izone" Slack App.
+
+The purpose of this API is to act as a relay between Google Calendar, Slack, 10 000' plans and our internal time tracking and economy system.
 
 ## Coding
 
