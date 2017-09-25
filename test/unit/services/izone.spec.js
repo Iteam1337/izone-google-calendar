@@ -24,7 +24,7 @@ describe('izone service', () => {
           }
         ]
       ),
-      getPerson: stub().resolves([
+      getPersonByEmail: stub().resolves([
         {
           p_shortname: 'mew',
           p_emal: 'mew@iteam.se',
@@ -95,7 +95,7 @@ describe('izone service', () => {
     it('gets person from izone db', () => {
       return service.getIzoneUser()
         .then(() => {
-          expect(databaseAdapter.getPerson)
+          expect(databaseAdapter.getPersonByEmail)
             .calledOnce
             .calledWith('mew@iteam.se')
         })
