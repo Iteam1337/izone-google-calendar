@@ -26,7 +26,7 @@ nodemon index.js
 ```
 
 ```
-# Run test/standard.
+# Run tests and standard linter.
 npm run watch
 ```
 
