@@ -65,7 +65,7 @@ describe('slack middleware', () => {
         })
     })
 
-    it('sets req.izoneUser, when person can be mapped', () => {
+    it('sets req.izone.user, when person can be mapped', () => {
       req.params.user_id = userId
       req.params.user_name = userName
 
@@ -79,9 +79,9 @@ describe('slack middleware', () => {
       return middleware.user(req, res, next)
         .then(() => {
           expect(next).callCount(1)
-          expect(req.izoneUser.p_id).to.eql(1)
-          expect(req.izoneUser.p_slack_user_id).to.eql(userId)
-          expect(req.izoneUser.p_slack_user_name).to.eql(userName)
+          expect(req.izone.user.p_id).to.eql(1)
+          expect(req.izone.user.p_slack_user_id).to.eql(userId)
+          expect(req.izone.user.p_slack_user_name).to.eql(userName)
         })
     })
 
@@ -96,7 +96,7 @@ describe('slack middleware', () => {
         .catch(() => {
           expect(next).callCount(1)
           expect(res.statusCode).to.eql(401)
-          expect(req.izoneUser).to.eql(undefined)
+          expect(req.izone.user).to.eql(undefined)
         })
     })
 
@@ -106,7 +106,7 @@ describe('slack middleware', () => {
         .catch(() => {
           expect(next).callCount(1)
           expect(res.statusCode).to.eql(500)
-          expect(req.izoneUser).to.eql(undefined)
+          expect(req.izone.user).to.eql(undefined)
         })
     })
   })
