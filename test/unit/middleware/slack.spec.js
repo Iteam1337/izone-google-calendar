@@ -26,7 +26,8 @@ describe('slack middleware', () => {
     next = stub()
 
     databaseAdapter = {
-      getPersonBySlackIdentity: stub().resolves()
+      getPersonBySlackIdentity: stub().resolves(),
+      updatePerson: stub().resolves()
     }
 
     middleware = proxyquire(process.cwd() + '/lib/middleware/slack', {
@@ -69,11 +70,13 @@ describe('slack middleware', () => {
       req.params.user_id = userId
       req.params.user_name = userName
 
-      const izoneUser = {
-        p_id: 1,
-        p_slack_user_id: userId,
-        p_slack_user_name: userName
-      }
+      const izoneUser = [
+        {
+          p_id: 1,
+          p_slack_user_id: userId,
+          p_slack_user_name: userName
+        }
+      ]
       databaseAdapter.getPersonBySlackIdentity = stub().resolves(izoneUser)
 
       return middleware.user(req, res, next)
@@ -82,6 +85,33 @@ describe('slack middleware', () => {
           expect(req.izone.user.p_id).to.eql(1)
           expect(req.izone.user.p_slack_user_id).to.eql(userId)
           expect(req.izone.user.p_slack_user_name).to.eql(userName)
+        })
+    })
+
+    it('updates people_db, when person lacks slack_id', () => {
+      req.params.user_id = userId
+      req.params.user_name = userName
+
+      const izoneUser = [
+        {
+          p_id: 1,
+          p_slack_user_id: null,
+          p_slack_user_name: userName
+        }
+      ]
+      databaseAdapter.getPersonBySlackIdentity = stub().resolves(izoneUser)
+
+      return middleware.user(req, res, next)
+        .then(() => {
+          expect(next).callCount(1)
+          expect(req.izone.user.p_id).to.eql(1)
+          expect(req.izone.user.p_slack_user_name).to.eql(userName)
+          expect(databaseAdapter.updatePerson)
+            .callCount(1)
+            .calledWith({
+              userId,
+              userName
+            })
         })
     })
 
