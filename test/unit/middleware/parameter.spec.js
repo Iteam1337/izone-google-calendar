@@ -8,7 +8,7 @@ const proxyquire = require('proxyquire')
 require('sinon-as-promised')
 chai.use(require('sinon-chai'))
 
-describe('slack middleware', () => {
+describe('parameter middleware', () => {
   let middleware
   let req, res, next
 
@@ -28,7 +28,7 @@ describe('slack middleware', () => {
     })
   })
 
-  describe('parameter', () => {
+  describe('parseParameters', () => {
     it('can parse week', () => {
       req.params.text = '/time week=2017w12'
       middleware.parseParameters(req, res, next)
