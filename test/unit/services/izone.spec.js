@@ -64,7 +64,7 @@ describe('izone service', () => {
 
   describe('getAllEvents()', () => {
     it('gets events from google', () => {
-      return service.getAllEvents({ week: '2017w10', google: {}})
+      return service.getAllEvents({ week: '2017w10', google: {} })
         .then(() => {
           expect(googleAdapter.getEvents)
             .calledOnce
@@ -73,7 +73,7 @@ describe('izone service', () => {
     })
 
     it('gets jobs from database', () => {
-      return service.getAllEvents({ week: '2017w10', google: {}, user: {}})
+      return service.getAllEvents({ week: '2017w10', google: {}, user: {} })
         .then(() => {
           expect(databaseAdapter.getJobLogs)
             .calledOnce
