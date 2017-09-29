@@ -5,7 +5,8 @@ const expect = chai.expect
 const {stub} = require('sinon')
 const proxyquire = require('proxyquire')
 
-const moment = require('moment')
+const moment = require('moment-timezone')
+moment.tz.setDefault('Europe/Stockholm')
 
 require('sinon-as-promised')
 chai.use(require('sinon-chai'))

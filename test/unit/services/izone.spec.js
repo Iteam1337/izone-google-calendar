@@ -93,8 +93,8 @@ describe('izone service', () => {
           {
             jl_alias: alias,
             jl_description: 'purring all day long',
-            jl_starttime: '2017-01-27T16:00:00+01:00',
-            jl_endtime: '2017-01-27T18:00:00+01:00',
+            jl_starttime: '2017-01-27T16:00:00.000Z',
+            jl_endtime: '2017-01-27T18:00:00.000Z',
             jl_hours: 2,
             jl_gcal_id: 'meowmeowmeow'
           }
@@ -129,8 +129,8 @@ describe('izone service', () => {
           {
             jl_alias: alias,
             jl_description: undefined,
-            jl_starttime: '2017-01-27T16:00:00+01:00',
-            jl_endtime: '2017-01-27T18:00:00+01:00',
+            jl_starttime: '2017-01-27T16:00:00.000Z',
+            jl_endtime: '2017-01-27T18:00:00.000Z',
             jl_hours: 2,
             jl_gcal_id: 'meowmeowmeow'
           }
@@ -165,8 +165,8 @@ describe('izone service', () => {
           {
             jl_alias: alias,
             jl_description: 'kurr:',
-            jl_starttime: '2017-01-27T16:00:00+01:00',
-            jl_endtime: '2017-01-27T18:00:00+01:00',
+            jl_starttime: '2017-01-27T16:00:00.000Z',
+            jl_endtime: '2017-01-27T18:00:00.000Z',
             jl_hours: 2,
             jl_gcal_id: 'kurr123'
           }
@@ -204,8 +204,8 @@ describe('izone service', () => {
           {
             jl_alias: alias,
             jl_description: '=^_^=',
-            jl_starttime: '2017-01-27T10:00:00+01:00',
-            jl_endtime: '2017-01-27T12:00:00+01:00',
+            jl_starttime: '2017-01-27T10:00:00.000Z',
+            jl_endtime: '2017-01-27T12:00:00.000Z',
             jl_hours: 2
           }
         ]
@@ -241,8 +241,8 @@ describe('izone service', () => {
           {
             jl_alias: alias,
             jl_description: '=^_^=',
-            jl_starttime: '2017-01-27T11:00:00+01:00',
-            jl_endtime: '2017-01-27T12:00:00+01:00',
+            jl_starttime: '2017-01-27T11:00:00.000Z',
+            jl_endtime: '2017-01-27T12:00:00.000Z',
             jl_hours: 1
           }
         ]
