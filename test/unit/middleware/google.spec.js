@@ -48,7 +48,7 @@ describe('google middleware', () => {
     })
   })
 
-  describe.only('validateGoogleAuthorization', () => {
+  describe('validateGoogleAuthorization', () => {
     const expiredTokenTime = moment().format('x') - 1000
 
     it('calls google adapter to get auth url if token is not set', () => {
