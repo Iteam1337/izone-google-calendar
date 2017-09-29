@@ -347,7 +347,7 @@ describe('izone service', () => {
   /**
    * Ensure that an unimported entry is 'warning'.
    */
-  it('sets hour status to "warning" if time entry is not imported', () => {
+  it('sets hour status to "danger" if time entry is not imported', () => {
     databaseAdapter.getJobLogs = stub().resolves([])
 
     googleAdapter.getEvents = stub().resolves(
@@ -367,7 +367,7 @@ describe('izone service', () => {
 
     return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
       .then(data => {
-        expect(data.hours['purr'].status).equals('warning')
+        expect(data.hours['purr'].status).equals('error')
       })
   })
 
