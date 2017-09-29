@@ -73,6 +73,17 @@ describe('google middleware', () => {
         })
     })
 
+    it('calls google adapter to get auth url if parameter getGoogleAuthUrl is set', () => {
+      req.izone.getGoogleAuthUrl = 'true'
+      sut.validateGoogleAuthorization(req, res, next)
+        .then(() => {
+          expect(google.generateAuthUrl).callCount(1)
+          expect(next)
+            .callCount(1)
+            .calledWith(false)
+        })
+    })
+
     it('calls google adapter to get new access token if token is not set and setGoogleToken parameter is set', () => {
       req.izone.user.p_google_token_expiry = null
       req.izone.setGoogleToken = 'meow'
@@ -94,6 +105,18 @@ describe('google middleware', () => {
           expect(google.getAccessToken)
             .callCount(1)
             .calledWith('meow')
+        })
+    })
+
+    it('calls google adapter to refresh access token if token is expired', () => {
+      req.izone.user.p_google_token_expiry = expiredTokenTime
+      req.izone.user.p_google_token_refresh_token = 'refresh_token_meow'
+
+      sut.validateGoogleAuthorization(req, res, next)
+        .then(() => {
+          expect(google.refreshAccessToken)
+            .callCount(1)
+            .calledWith('refresh_token_meow')
         })
     })
 
