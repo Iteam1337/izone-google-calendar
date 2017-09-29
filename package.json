@@ -8,7 +8,10 @@
   },
   "watch": {
     "standard": {
-      "patterns": ["lib", "test"],
+      "patterns": [
+        "lib",
+        "test"
+      ],
       "extensions": "js",
       "ignore": "",
       "quiet": false,
@@ -17,7 +20,10 @@
       "inherit": true
     },
     "test": {
-      "patterns": ["lib", "test"],
+      "patterns": [
+        "lib",
+        "test"
+      ],
       "extensions": "js",
       "ignore": "",
       "quiet": false,
