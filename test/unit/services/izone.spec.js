@@ -82,26 +82,6 @@ describe('izone service', () => {
     })
   })
 
-  describe('getIzoneUser()', () => {
-    it('gets calendar from google', () => {
-      return service.getIzoneUser()
-        .then(() => {
-          expect(googleAdapter.getCalendars)
-            .calledOnce
-            .calledWith()
-        })
-    })
-
-    it('gets person from izone db', () => {
-      return service.getIzoneUser()
-        .then(() => {
-          expect(databaseAdapter.getPersonByEmail)
-            .calledOnce
-            .calledWith('mew@iteam.se')
-        })
-    })
-  })
-
   describe('getWeekSummary()', () => {
     /**
      * Ensure that an unchanged time entry is considered OK.
