@@ -73,7 +73,7 @@ describe('izone service', () => {
     })
 
     it('gets jobs from database', () => {
-      return service.getAllEvents({ week: '2017w10', google: {}})
+      return service.getAllEvents({ week: '2017w10', google: {}, user: {}})
         .then(() => {
           expect(databaseAdapter.getJobLogs)
             .calledOnce
@@ -136,7 +136,7 @@ describe('izone service', () => {
         ]
       )
 
-      return service.getWeekSummary({week: '2017w10', google: {}})
+      return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
         .then(data => {
           expect(data.hours[`${alias}`].status).equals('ok')
         })
@@ -172,7 +172,7 @@ describe('izone service', () => {
         ]
       )
 
-      return service.getWeekSummary({week: '2017w10', google: {}})
+      return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
         .then(data => {
           expect(data.hours[`${alias}`].status).equals('ok')
         })
@@ -208,7 +208,7 @@ describe('izone service', () => {
         ]
       )
 
-      return service.getWeekSummary({week: '2017w10', google: {}})
+      return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
         .then(data => {
           expect(data.hours[`${alias}`].status).equals('ok')
         })
@@ -245,7 +245,7 @@ describe('izone service', () => {
         ]
       )
 
-      return service.getWeekSummary({week: '2017w10', google: {}})
+      return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
         .then(data => {
           expect(data.hours[`${alias}`].status).equals('warning')
         })
@@ -282,7 +282,7 @@ describe('izone service', () => {
         ]
       )
 
-      return service.getWeekSummary({week: '2017w10', google: {}})
+      return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
         .then(data => {
           expect(data.hours[`${alias}`].status).equals('warning')
           expect(data.hours[`${alias}`].hours).equals(2)
@@ -320,7 +320,7 @@ describe('izone service', () => {
         ]
       )
 
-      return service.getWeekSummary({week: '2017w10', google: {}})
+      return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
         .then(data => {
           expect(data.hours[`${alias}`].status).equals('warning')
         })
@@ -356,7 +356,7 @@ describe('izone service', () => {
         ]
       )
 
-      return service.getWeekSummary({week: '2017w10', google: {}})
+      return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
         .then(data => {
           expect(data.hours['meow'].status).equals('error')
           expect(data.hours['purr']).equals(undefined)
@@ -385,7 +385,7 @@ describe('izone service', () => {
       ]
     )
 
-    return service.getWeekSummary({week: '2017w10', google: {}})
+    return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
       .then(data => {
         expect(data.hours['purr'].status).equals('warning')
       })
@@ -412,7 +412,7 @@ describe('izone service', () => {
       ]
     )
 
-    return service.getWeekSummary({week: '2017w10', google: {}})
+    return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
       .then(data => {
         expect(data.hours['purr'].hours).equals(8)
       })
