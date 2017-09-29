@@ -39,7 +39,7 @@ describe('google middleware', () => {
 
     google = {
       generateAuthUrl: stub(),
-      getAccessToken: stub().resolves()
+      getAccessToken: stub().resolves({})
     }
 
     sut = proxyquire(process.cwd() + '/lib/middleware/google', {
