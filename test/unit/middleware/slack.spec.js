@@ -115,7 +115,7 @@ describe('slack middleware', () => {
         })
     })
 
-    it('returns error 401, when person cannot be mapped', () => {
+    it('returns a friendly message, when person cannot be mapped', () => {
       req.params.user_id = userId
       req.params.user_name = userName
 
@@ -125,7 +125,8 @@ describe('slack middleware', () => {
         .then(() => { expect('should go to catch()').to.eql('') })
         .catch(() => {
           expect(next).callCount(1)
-          expect(res.statusCode).to.eql(401)
+          expect(res.statusCode).to.eql(200)
+          expect(res.send.firstCall.args[0]).to.eql({text: 'Sorry, your user is not configured yet.'})
           expect(req.izone.user).to.eql(undefined)
         })
     })
