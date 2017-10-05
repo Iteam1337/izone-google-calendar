@@ -40,3 +40,24 @@ git checkout -b feature/some_new_feature
 ```
 
 When creating a PR, make sure to merge from develop so that your branch is ready to be merged. Also, if the code changes are not self-explanatory, add some notes explaining what you have done and how to verify its functionality.
+
+#### Database
+
+View relevant fields in people_db
+```
+use izone;
+
+SELECT	 p_id
+		,p_firstname
+		,p_lastname
+		,p_izusername
+		,p_slack_user_id
+		,p_slack_user_name
+		,p_google_calendar_address
+		,p_google_calendar_id
+		,p_google_token_access_token
+		,p_google_token_expiry
+		,p_google_token_refresh_token
+FROM people_db
+
+```
