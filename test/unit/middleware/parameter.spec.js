@@ -29,10 +29,22 @@ describe('parameter middleware', () => {
   })
 
   describe('parseParameters', () => {
-    it('can parse week', () => {
+    it('can parse parameter "week"', () => {
       req.params.text = '/time week=2017w12'
       middleware.parseParameters(req, res, next)
       expect(req.izone.week).to.eql('2017w12')
+    })
+
+    it('can parse parameter "import=träna"', () => {
+      req.params.text = '/time import=träna'
+      middleware.parseParameters(req, res, next)
+      expect(req.izone.import).to.eql('träna')
+    })
+
+    it('can parse parameter "import=iteamvs"', () => {
+      req.params.text = '/time import=iteamvs'
+      middleware.parseParameters(req, res, next)
+      expect(req.izone.import).to.eql('iteamvs')
     })
   })
 })

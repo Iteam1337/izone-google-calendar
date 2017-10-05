@@ -11,6 +11,7 @@ chai.use(require('sinon-chai'))
 describe('slack route', () => {
   let route
   let req, res, next
+  let databaseAdapter
   let izoneService, request, slackService
 
   beforeEach(() => {
@@ -34,7 +35,12 @@ describe('slack route', () => {
       summary: stub().resolves()
     }
 
+    databaseAdapter = {
+      import: stub().resolves()
+    }
+
     route = proxyquire(process.cwd() + '/lib/routes/slack', {
+      '../adapters/database': databaseAdapter,
       '../services/izone': izoneService,
       'request': request,
       '../services/slack': slackService
@@ -46,6 +52,10 @@ describe('slack route', () => {
       req.params = {
         payload: JSON.stringify({})
       }
+
+      izoneService.getAllEvents = stub().resolves({
+        calendar: []
+      })
     })
 
     it('calls slackService', () => {
@@ -53,20 +63,6 @@ describe('slack route', () => {
         .then(() => {
           expect(slackService.summary).callCount(1)
         })
-    })
-  })
-
-  describe('POST /slack/import', () => {
-    beforeEach(() => {
-      req.params = {
-        payload: JSON.stringify({
-          response_url: ''
-        })
-      }
-
-      izoneService.getAllEvents = stub().resolves({
-        calendar: []
-      })
     })
 
     it('calls izone service', () => {
@@ -76,6 +72,43 @@ describe('slack route', () => {
       return route.import(req, res, next)
         .then(() => {
           expect(izoneService.getAllEvents).callCount(1)
+        })
+    })
+
+    it.only('respects user\'s autoimport setting', () => {
+      req.izone = {
+        import: 'something',
+        user: {
+          p_izone_autoimport: false,
+          p_izusername: 'abc'
+        }
+      }
+
+      const events = {
+        calendar: [
+          {
+            end: {
+              dateTime: Date()
+            },
+            start: {
+              dateTime: Date()
+            },
+            summary: 'somethingelse: test'
+          }
+        ],
+        izone: []
+      }
+      izoneService.getAllEvents = stub().resolves(events)
+      databaseAdapter.getJobByAlias = stub().resolves([
+        {
+          job_alias: 'somethingelse'
+        }
+      ])
+
+      return route.import(req, res, next)
+        .then(() => {
+          console.log()
+          expect(databaseAdapter.import).callCount(0)
         })
     })
   })
