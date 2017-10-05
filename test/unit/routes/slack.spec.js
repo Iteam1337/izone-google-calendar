@@ -36,7 +36,8 @@ describe('slack route', () => {
     }
 
     databaseAdapter = {
-      import: stub().resolves()
+      import: stub().resolves(),
+      getJobByAlias: stub()
     }
 
     route = proxyquire(process.cwd() + '/lib/routes/slack', {
@@ -75,7 +76,43 @@ describe('slack route', () => {
         })
     })
 
-    it.only('respects user\'s autoimport setting', () => {
+    it('respects user\'s autoimport setting and does not import anything if import parameter is not set', () => {
+      req.izone = {
+        user: {
+          p_izone_autoimport: false,
+          p_izusername: 'abc'
+        }
+      }
+
+      const events = {
+        calendar: [
+          {
+            end: {
+              dateTime: Date()
+            },
+            start: {
+              dateTime: Date()
+            },
+            summary: 'something: test'
+          }
+        ],
+        izone: []
+      }
+      izoneService.getAllEvents = stub().resolves(events)
+      databaseAdapter.getJobByAlias = stub().resolves([
+        {
+          job_alias: 'something'
+        }
+      ])
+
+      return route.import(req, res, next)
+        .then(() => {
+          console.log()
+          expect(databaseAdapter.import).callCount(0)
+        })
+    })
+
+    it('respects user\'s autoimport setting and skips alias not defined in import parameter', () => {
       req.izone = {
         import: 'something',
         user: {
@@ -109,6 +146,119 @@ describe('slack route', () => {
         .then(() => {
           console.log()
           expect(databaseAdapter.import).callCount(0)
+        })
+    })
+
+    it('respects user\'s autoimport setting and only imports alias defined in import parameter', () => {
+      req.izone = {
+        import: 'something',
+        user: {
+          p_izone_autoimport: false,
+          p_izusername: 'abc'
+        }
+      }
+
+      const events = {
+        calendar: [
+          {
+            end: {
+              dateTime: Date()
+            },
+            start: {
+              dateTime: Date()
+            },
+            summary: 'something: test'
+          },
+          {
+            end: {
+              dateTime: Date()
+            },
+            start: {
+              dateTime: Date()
+            },
+            summary: 'somethingelse: test'
+          }
+        ],
+        izone: []
+      }
+      izoneService.getAllEvents = stub().resolves(events)
+
+      databaseAdapter.getJobByAlias
+        .withArgs('somethingelse')
+        .resolves([
+          {
+            job_alias: 'somethingelse'
+          }
+        ])
+
+      databaseAdapter.getJobByAlias
+        .withArgs('something')
+        .resolves([
+          {
+            job_alias: 'something'
+          }
+        ])
+
+      return route.import(req, res, next)
+        .then(() => {
+          console.log()
+          expect(databaseAdapter.import).callCount(1)
+        })
+    })
+
+    it('always imports everything if autoimport is set', () => {
+      req.izone = {
+        user: {
+          p_izone_autoimport: true,
+          p_izusername: 'abc'
+        }
+      }
+
+      const events = {
+        calendar: [
+          {
+            end: {
+              dateTime: Date()
+            },
+            start: {
+              dateTime: Date()
+            },
+            summary: 'something: test'
+          },
+          {
+            end: {
+              dateTime: Date()
+            },
+            start: {
+              dateTime: Date()
+            },
+            summary: 'somethingelse: test'
+          }
+        ],
+        izone: []
+      }
+      izoneService.getAllEvents = stub().resolves(events)
+
+      databaseAdapter.getJobByAlias
+        .withArgs('somethingelse')
+        .resolves([
+          {
+            job_alias: 'somethingelse'
+          }
+        ])
+
+      databaseAdapter.getJobByAlias
+        .withArgs('something')
+        .resolves([
+          {
+            job_alias: 'something'
+          }
+        ])
+
+      return route.import(req, res, next)
+        .then(() => {
+          console.log()
+          expect(databaseAdapter.import).callCount(2)
         })
     })
   })
