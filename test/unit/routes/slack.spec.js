@@ -5,6 +5,8 @@ const expect = chai.expect
 const {stub} = require('sinon')
 const proxyquire = require('proxyquire')
 
+const moment = require('moment')
+
 require('sinon-as-promised')
 chai.use(require('sinon-chai'))
 
@@ -12,7 +14,7 @@ describe('slack route', () => {
   let route
   let req, res, next
   let databaseAdapter
-  let izoneService, request, slackService
+  let izoneService, request, slackService, googleAdapter
 
   beforeEach(() => {
     req = {
@@ -40,11 +42,16 @@ describe('slack route', () => {
       getJobByAlias: stub()
     }
 
+    googleAdapter = {
+      markEventImported: stub().resolves()
+    }
+
     route = proxyquire(process.cwd() + '/lib/routes/slack', {
       '../adapters/database': databaseAdapter,
       '../services/izone': izoneService,
       'request': request,
-      '../services/slack': slackService
+      '../services/slack': slackService,
+      '../adapters/google': googleAdapter
     })
   })
 
@@ -88,10 +95,10 @@ describe('slack route', () => {
         calendar: [
           {
             end: {
-              dateTime: Date()
+              dateTime: moment()
             },
             start: {
-              dateTime: Date()
+              dateTime: moment()
             },
             summary: 'something: test'
           }
@@ -125,10 +132,10 @@ describe('slack route', () => {
         calendar: [
           {
             end: {
-              dateTime: Date()
+              dateTime: moment()
             },
             start: {
-              dateTime: Date()
+              dateTime: moment()
             },
             summary: 'somethingelse: test'
           }
@@ -151,6 +158,9 @@ describe('slack route', () => {
 
     it('respects user\'s autoimport setting and only imports alias defined in import parameter', () => {
       req.izone = {
+        google: {
+          accessToken: 'purr'
+        },
         import: 'something',
         user: {
           p_izone_autoimport: false,
@@ -162,19 +172,19 @@ describe('slack route', () => {
         calendar: [
           {
             end: {
-              dateTime: Date()
+              dateTime: moment()
             },
             start: {
-              dateTime: Date()
+              dateTime: moment()
             },
             summary: 'something: test'
           },
           {
             end: {
-              dateTime: Date()
+              dateTime: moment()
             },
             start: {
-              dateTime: Date()
+              dateTime: moment()
             },
             summary: 'somethingelse: test'
           }
@@ -201,13 +211,15 @@ describe('slack route', () => {
 
       return route.import(req, res, next)
         .then(() => {
-          console.log()
           expect(databaseAdapter.import).callCount(1)
         })
     })
 
     it('always imports everything if autoimport is set', () => {
       req.izone = {
+        google: {
+          accessToken: 'purr'
+        },
         user: {
           p_izone_autoimport: true,
           p_izusername: 'abc'
@@ -218,19 +230,19 @@ describe('slack route', () => {
         calendar: [
           {
             end: {
-              dateTime: Date()
+              dateTime: moment()
             },
             start: {
-              dateTime: Date()
+              dateTime: moment()
             },
             summary: 'something: test'
           },
           {
             end: {
-              dateTime: Date()
+              dateTime: moment()
             },
             start: {
-              dateTime: Date()
+              dateTime: moment()
             },
             summary: 'somethingelse: test'
           }

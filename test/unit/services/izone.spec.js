@@ -397,4 +397,73 @@ describe('izone service', () => {
         expect(data.hours['purr'].hours).equals(8)
       })
   })
+
+  it('rounds single event hours up to the nearst half-hour', () => {
+    databaseAdapter.getJobLogs = stub().resolves([])
+
+    googleAdapter.getEvents = stub().resolves(
+      [
+        {
+          id: '1',
+          summary: 'iteam: five minutes',
+          start: {
+            dateTime: '2017-01-27T16:00:00+01:00'
+          },
+          end: {
+            dateTime: '2017-01-27T16:05:00+01:00'
+          }
+        },
+        {
+          id: '2',
+          summary: 'izone: fourty-nine minutes',
+          start: {
+            dateTime: '2017-01-27T17:00:00+01:00'
+          },
+          end: {
+            dateTime: '2017-01-27T17:49:00+01:00'
+          }
+        }
+      ]
+    )
+
+    return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
+      .then(data => {
+        expect(data.hours['iteam'].hours).equals(0.5)
+        expect(data.hours['izone'].hours).equals(1)
+      })
+  })
+
+  it('rounds multiple event hours up to the nearst half-hour', () => {
+    databaseAdapter.getJobLogs = stub().resolves([])
+
+    googleAdapter.getEvents = stub().resolves(
+      [
+        {
+          id: '1',
+          summary: 'iteam: five minutes here',
+          start: {
+            dateTime: '2017-01-27T16:00:00+01:00'
+          },
+          end: {
+            dateTime: '2017-01-27T16:05:00+01:00'
+          }
+        },
+        {
+          id: '2',
+          summary: 'iteam: two hours and thirty-two minutes there',
+          start: {
+            dateTime: '2017-01-27T17:00:00+01:00'
+          },
+          end: {
+            dateTime: '2017-01-27T19:32:00+01:00'
+          }
+        }
+      ]
+    )
+
+    return service.getWeekSummary({week: '2017w10', google: {}, user: {}})
+      .then(data => {
+        expect(data.hours['iteam'].hours).equals(3)
+      })
+  })
 })
