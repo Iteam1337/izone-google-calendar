@@ -1,8 +1,9 @@
 FROM node:8-alpine
 WORKDIR /app
 
-ADD ./index.js index.js
-ADD ./lib lib
+ADD ./lib /app/lib
+ADD ./index.js /app/index.js
+ADD ./package.json /app/package.json
 
 RUN npm install -s --production
 
