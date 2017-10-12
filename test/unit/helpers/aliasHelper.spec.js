@@ -46,6 +46,13 @@ describe('aliasHelper', () => {
     {
       input: '(undefined)',
       expected: false
+    },
+    {
+      input: null,
+      expected: false
+    },
+    {
+      expected: false
     }
   ]
 
