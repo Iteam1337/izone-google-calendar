@@ -22,12 +22,12 @@ npm i -g nodemon
 
 ```
 # Run server.
-nodemon index.js
+nodemon
 ```
 
 ```
-# Run tests and standard linter.
-npm run watch
+# Run npm-watch that runs standard linter and tests each time a file changes.
+npm start
 ```
 
 ### Contributing
@@ -37,9 +37,16 @@ If you are going to contribute, make sure you create a feature branch with your 
 ```
 # Create a feature branch.
 git checkout -b feature/some_new_feature
+# or, using git flow
+git flow feature start some_new_feature
 ```
 
 When creating a PR, make sure to merge from develop so that your branch is ready to be merged. Also, if the code changes are not self-explanatory, add some notes explaining what you have done and how to verify its functionality.
+
+```
+git pull origin develop
+git push origin feature/some_new_feature
+```
 
 #### Database
 

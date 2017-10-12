@@ -3,9 +3,6 @@
   "version": "0.0.10",
   "description": "REST API for integrating izone functionality with Slack.",
   "main": "index.js",
-  "bin": {
-    "izone": "bin/izone.js"
-  },
   "watch": {
     "test": {
       "patterns": [
@@ -13,7 +10,6 @@
         "test"
       ],
       "extensions": "js",
-      "ignore": "",
       "quiet": false,
       "legacyWatch": true,
       "inherit": true
@@ -21,9 +17,8 @@
   },
   "scripts": {
     "pretest": "node_modules/standard/bin/cmd.js | node_modules/snazzy/bin/cmd.js",
-    "start": "nodemon index.js",
-    "test": "mocha ./test --recursive",
-    "watch": "npm-watch"
+    "start": "npm-watch",
+    "test": "mocha ./test --recursive"
   },
   "repository": {
     "type": "git",
@@ -37,9 +32,6 @@
     }
   ],
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Iteam1337/izone-slack/issues"
-  },
   "homepage": "https://iteam.se",
   "dependencies": {
     "google-auth-library": "^0.10.0",
