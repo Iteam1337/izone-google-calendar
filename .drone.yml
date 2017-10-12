@@ -4,7 +4,6 @@ pipeline:
     commands:
       - npm install -s
       - npm run test
-      - npm run standard
   publish_image:
     image: plugins/docker
     repo: iteam1337/izone
