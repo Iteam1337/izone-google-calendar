@@ -1,10 +1,10 @@
 FROM node:8-alpine
 WORKDIR /app
 
-ADD ./index.js index.js
-ADD ./lib lib
+ADD ./index.js /app/ndex.js
+ADD ./lib /app/lib
 
-RUN npm install -s --production
+RUN npm install --production
 
 EXPOSE 3000
 CMD node index.js
