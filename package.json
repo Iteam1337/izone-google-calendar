@@ -7,18 +7,6 @@
     "izone": "bin/izone.js"
   },
   "watch": {
-    "standard": {
-      "patterns": [
-        "lib",
-        "test"
-      ],
-      "extensions": "js",
-      "ignore": "",
-      "quiet": false,
-      "legacyWatch": true,
-      "delay": 2500,
-      "inherit": true
-    },
     "test": {
       "patterns": [
         "lib",
@@ -32,8 +20,8 @@
     }
   },
   "scripts": {
-    "server": "nodemon index.js",
-    "standard": "node_modules/standard/bin/cmd.js | node_modules/snazzy/bin/cmd.js",
+    "pretest": "node_modules/standard/bin/cmd.js | node_modules/snazzy/bin/cmd.js",
+    "start": "nodemon index.js",
     "test": "mocha ./test --recursive",
     "watch": "npm-watch"
   },
