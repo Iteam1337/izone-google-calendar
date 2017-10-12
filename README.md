@@ -8,25 +8,28 @@ The purpose of this API is to act as a relay between Google Calendar, Slack, 10 
 
 ### Running locally
 
-#### 1
+#### Setup node and install dependencies
 
+Assuming you are already using nvm, install or use the node version specified in .nvmrc
 ```
-# Setup.
-nvm use
+nvm install # (or nvm use)
+```
+
+Install dependencies and install nodemon globally.
+```
 npm i
 npm i -g nodemon
 
 ```
 
-#### 2
+#### Run the REST API and the watch scripts locally.
 
+Run server with nodemon.
 ```
-# Run server.
 nodemon
 ```
-
+Run npm-watch that runs standard linter and test upon each file change.
 ```
-# Run npm-watch that runs standard linter and tests each time a file changes.
 npm start
 ```
 
