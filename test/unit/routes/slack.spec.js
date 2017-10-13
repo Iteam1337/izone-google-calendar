@@ -506,6 +506,51 @@ describe('routes/slack', () => {
         })
     })
 
+    it('updates event if start time differs several days', () => {
+      const startTimeCalendar = moment('2017-06-30 09:00:00')
+      const startTimeIzone = moment('2017-05-01 09:00:00')
+
+      const endTimeCalendar = moment('2017-06-30 10:00:00')
+      const endTimeIzone = moment('2017-05-01 10:00:00')
+
+      izoneService.getAllEvents = stub().resolves({
+        calendar: [
+          {
+            end: {
+              dateTime: endTimeCalendar
+            },
+            start: {
+              dateTime: startTimeCalendar
+            },
+            summary: `${alias}: working`,
+            id: '1q2w3e'
+          }
+        ],
+        izone: [
+          {
+            jl_endtime: endTimeIzone,
+            jl_starttime: startTimeIzone,
+            jl_description: 'working',
+            jl_hours: 1,
+            jl_alias: alias,
+            jl_gcal_id: '1q2w3e'
+          }
+        ]
+      })
+
+      return sut.import(req, res, next)
+        .then(() => {
+          expect(databaseAdapter.update)
+            .callCount(1)
+            .calledWith('1q2w3e', {
+              jl_starttime: startTimeCalendar.format('YYYY-MM-DD HH:mm:ss'),
+              jl_endtime: endTimeCalendar.format('YYYY-MM-DD HH:mm:ss'),
+              jl_hours: 1,
+              jl_description: 'working'
+            })
+        })
+    })
+
     it('updates event if duration differs', () => {
       const startTime = moment('2017-06-30 09:00:00')
 
@@ -589,6 +634,44 @@ describe('routes/slack', () => {
               jl_hours: 1,
               jl_description: 'doing stuff and doing some work'
             })
+        })
+    })
+
+    it('does not update event if time, duration, alias and description is unchanged', () => {
+      const id = '1q2w3e'
+      const description = 'doing stuff'
+      const endTime = moment('2017-06-30 10:00:00')
+      const startTime = moment('2017-06-30 09:00:00')
+
+      izoneService.getAllEvents = stub().resolves({
+        calendar: [
+          {
+            end: {
+              dateTime: endTime
+            },
+            start: {
+              dateTime: startTime
+            },
+            summary: `${alias}: ${description}`,
+            id
+          }
+        ],
+        izone: [
+          {
+            jl_endtime: endTime,
+            jl_starttime: startTime,
+            jl_description: description,
+            jl_hours: 1,
+            jl_alias: alias,
+            jl_gcal_id: id
+          }
+        ]
+      })
+
+      return sut.import(req, res, next)
+        .then(() => {
+          expect(databaseAdapter.update)
+            .callCount(0)
         })
     })
   })
