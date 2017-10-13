@@ -53,7 +53,7 @@ describe('slack route', () => {
     })
   })
 
-  describe('POST /slack', () => {
+  describe('import() works', () => {
     beforeEach(() => {
       req.params = {
         payload: JSON.stringify({})
@@ -80,16 +80,28 @@ describe('slack route', () => {
           expect(izoneService.getAllEvents).callCount(1)
         })
     })
+  })
 
-    it('respects user\'s autoimport setting and does not import anything if import parameter is not set', () => {
+  /*
+   * User "autoimport" setting tests.
+   */
+  describe("import handles user's autoimport setting correctly", () => {
+    beforeEach(() => {
+      req.params = {
+        payload: JSON.stringify({})
+      }
+
       req.izone = {
         user: {
           p_izone_autoimport: false,
           p_izusername: 'abc'
+        },
+        google: {
+          accessToken: 'purr'
         }
       }
 
-      const events = {
+      izoneService.getAllEvents = stub().resolves({
         calendar: [
           {
             end: {
@@ -102,14 +114,26 @@ describe('slack route', () => {
           }
         ],
         izone: []
-      }
-      izoneService.getAllEvents = stub().resolves(events)
-      databaseAdapter.getJobByAlias = stub().resolves([
+      })
+
+      databaseAdapter.getJobByAlias
+      .withArgs('somethingelse')
+      .resolves([
+        {
+          job_alias: 'somethingelse'
+        }
+      ])
+
+      databaseAdapter.getJobByAlias
+      .withArgs('something')
+      .resolves([
         {
           job_alias: 'something'
         }
       ])
+    })
 
+    it('respects user\'s autoimport setting and does not import anything if import parameter is not set', () => {
       return route.import(req, res, next)
         .then(() => {
           console.log()
@@ -118,34 +142,7 @@ describe('slack route', () => {
     })
 
     it('respects user\'s autoimport setting and skips alias not defined in import parameter', () => {
-      req.izone = {
-        import: 'something',
-        user: {
-          p_izone_autoimport: false,
-          p_izusername: 'abc'
-        }
-      }
-
-      const events = {
-        calendar: [
-          {
-            end: {
-              dateTime: moment()
-            },
-            start: {
-              dateTime: moment()
-            },
-            summary: 'somethingelse: test'
-          }
-        ],
-        izone: []
-      }
-      izoneService.getAllEvents = stub().resolves(events)
-      databaseAdapter.getJobByAlias = stub().resolves([
-        {
-          job_alias: 'somethingelse'
-        }
-      ])
+      req.izone.import = 'somethingelse'
 
       return route.import(req, res, next)
         .then(() => {
@@ -155,16 +152,7 @@ describe('slack route', () => {
     })
 
     it('respects user\'s autoimport setting and only imports alias defined in import parameter', () => {
-      req.izone = {
-        google: {
-          accessToken: 'purr'
-        },
-        import: 'something',
-        user: {
-          p_izone_autoimport: false,
-          p_izusername: 'abc'
-        }
-      }
+      req.izone.import = 'something'
 
       const events = {
         calendar: [
@@ -190,22 +178,6 @@ describe('slack route', () => {
         izone: []
       }
       izoneService.getAllEvents = stub().resolves(events)
-
-      databaseAdapter.getJobByAlias
-        .withArgs('somethingelse')
-        .resolves([
-          {
-            job_alias: 'somethingelse'
-          }
-        ])
-
-      databaseAdapter.getJobByAlias
-        .withArgs('something')
-        .resolves([
-          {
-            job_alias: 'something'
-          }
-        ])
 
       return route.import(req, res, next)
         .then(() => {
@@ -214,15 +186,7 @@ describe('slack route', () => {
     })
 
     it('always imports everything if autoimport is set', () => {
-      req.izone = {
-        google: {
-          accessToken: 'purr'
-        },
-        user: {
-          p_izone_autoimport: true,
-          p_izusername: 'abc'
-        }
-      }
+      req.izone.user.p_izone_autoimport = true
 
       const events = {
         calendar: [
@@ -249,27 +213,47 @@ describe('slack route', () => {
       }
       izoneService.getAllEvents = stub().resolves(events)
 
-      databaseAdapter.getJobByAlias
-        .withArgs('somethingelse')
-        .resolves([
-          {
-            job_alias: 'somethingelse'
-          }
-        ])
-
-      databaseAdapter.getJobByAlias
-        .withArgs('something')
-        .resolves([
-          {
-            job_alias: 'something'
-          }
-        ])
-
       return route.import(req, res, next)
         .then(() => {
           console.log()
           expect(databaseAdapter.import).callCount(2)
         })
+    })
+  })
+
+  /*
+   * Import logic tests with regard to alias job_db mapping.
+   */
+  describe('import() handles aliases correctly', () => {
+    beforeEach(() => {
+      req.params = {
+        payload: JSON.stringify({})
+      }
+
+      izoneService.getAllEvents = stub().resolves({
+        calendar: []
+      })
+    })
+
+    it('does not import hours if alias cannot be found in database', () => {
+      expect(true).to.eql(false)
+    })
+
+    it('does not import hours if alias maps to more than one project', () => {
+      expect(true).to.eql(false)
+    })
+
+    it('does not import hours if time entry has not ended yet', () => {
+      expect(true).to.eql(false)
+    })
+
+    it('does not import hours that contain no alias and are not workouts', () => {
+      // TODO: Write a test with a time entry that LACKS : in the name.
+      expect(true).to.eql(false)
+    })
+
+    it('imports hours if alias maps to a single "job" in the database', () => {
+      expect(true).to.eql(false)
     })
   })
 })
