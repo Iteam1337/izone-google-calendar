@@ -8,7 +8,7 @@ const moment = require('moment')
 require('sinon-as-promised')
 chai.use(require('sinon-chai'))
 
-describe('slack route', () => {
+describe('routes/slack', () => {
   let sut
   let req, res, next
   let databaseAdapter
@@ -37,7 +37,8 @@ describe('slack route', () => {
 
     databaseAdapter = {
       import: stub().resolves(),
-      getJobByAlias: stub()
+      getJobByAlias: stub(),
+      update: stub().resolves()
     }
 
     googleAdapter = {
@@ -53,7 +54,7 @@ describe('slack route', () => {
     })
   })
 
-  describe('import() works', () => {
+  describe('import()', () => {
     beforeEach(() => {
       req.params = {
         payload: JSON.stringify({})
@@ -85,7 +86,7 @@ describe('slack route', () => {
   /*
    * User "autoimport" setting tests.
    */
-  describe("import handles user's autoimport setting correctly", () => {
+  describe('import()', () => {
     beforeEach(() => {
       req.params = {
         payload: JSON.stringify({})
@@ -136,7 +137,6 @@ describe('slack route', () => {
     it('respects user\'s autoimport setting and does not import anything if import parameter is not set', () => {
       return sut.import(req, res, next)
         .then(() => {
-          console.log()
           expect(databaseAdapter.import).callCount(0)
         })
     })
@@ -146,7 +146,6 @@ describe('slack route', () => {
 
       return sut.import(req, res, next)
         .then(() => {
-          console.log()
           expect(databaseAdapter.import).callCount(0)
         })
     })
@@ -215,7 +214,6 @@ describe('slack route', () => {
 
       return sut.import(req, res, next)
         .then(() => {
-          console.log()
           expect(databaseAdapter.import).callCount(2)
         })
     })
@@ -224,7 +222,7 @@ describe('slack route', () => {
   /*
    * Import logic tests with regard to alias job_db mapping.
    */
-  describe('import() handles aliases correctly when importing new hours', () => {
+  describe('import()', () => {
     const aliases = {
       hasJob: 'izone',
       doesNotHaveJob: 'izoneblablabla',
@@ -432,6 +430,79 @@ describe('slack route', () => {
         .then(() => {
           expect(databaseAdapter.import)
             .callCount(3)
+        })
+    })
+  })
+
+  describe('import()', () => {
+    const alias = 'izone'
+
+    beforeEach(() => {
+      req.params = {
+        payload: JSON.stringify({})
+      }
+
+      req.izone = {
+        user: {
+          p_izone_autoimport: true,
+          p_izusername: 'abc'
+        },
+        google: {
+          accessToken: 'zaq12wsxcde34rfv'
+        }
+      }
+
+      databaseAdapter.getJobByAlias
+        .withArgs(alias)
+        .resolves([
+          {
+            job_alias: alias
+          }
+        ])
+    })
+
+    it('updates event if start time differs', () => {
+      const startTimeCalendar = moment('2017-06-30 09:00:00')
+      const startTimeIzone = moment('2017-06-30 10:00:00')
+
+      const endTimeCalendar = moment('2017-06-30 10:00:00')
+      const endTimeIzone = moment('2017-06-30 11:00:00')
+
+      izoneService.getAllEvents = stub().resolves({
+        calendar: [
+          {
+            end: {
+              dateTime: endTimeCalendar
+            },
+            start: {
+              dateTime: startTimeCalendar
+            },
+            summary: `${alias}: working`,
+            id: '1q2w3e'
+          }
+        ],
+        izone: [
+          {
+            jl_endtime: endTimeIzone,
+            jl_starttime: startTimeIzone,
+            jl_description: 'working',
+            jl_hours: 1,
+            jl_alias: alias,
+            jl_gcal_id: '1q2w3e'
+          }
+        ]
+      })
+
+      return sut.import(req, res, next)
+        .then(() => {
+          expect(databaseAdapter.update)
+            .callCount(1)
+            .calledWith('1q2w3e', {
+              jl_starttime: startTimeCalendar.format('YYYY-MM-DD HH:mm:ss'),
+              jl_endtime: endTimeCalendar.format('YYYY-MM-DD HH:mm:ss'),
+              jl_hours: 1,
+              jl_description: 'working'
+            })
         })
     })
   })
