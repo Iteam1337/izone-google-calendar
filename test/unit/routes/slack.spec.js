@@ -506,12 +506,12 @@ describe('routes/slack', () => {
         })
     })
 
-    it('updates event if start time differs several days', () => {
-      const startTimeCalendar = moment('2017-06-30 09:00:00')
-      const startTimeIzone = moment('2017-05-01 09:00:00')
+    it.only('updates event if moved to another week', () => {
+      const startTimeCalendar = moment('2017-10-10 08:30:00')
+      const startTimeIzone = moment('2017-10-16 08:30:00')
 
-      const endTimeCalendar = moment('2017-06-30 10:00:00')
-      const endTimeIzone = moment('2017-05-01 10:00:00')
+      const endTimeCalendar = moment('2017-10-10 10:00:00')
+      const endTimeIzone = moment('2017-10-16 10:00:00')
 
       izoneService.getAllEvents = stub().resolves({
         calendar: [
@@ -531,21 +531,26 @@ describe('routes/slack', () => {
             jl_endtime: endTimeIzone,
             jl_starttime: startTimeIzone,
             jl_description: 'working',
-            jl_hours: 1,
+            jl_hours: 1.5,
             jl_alias: alias,
             jl_gcal_id: '1q2w3e'
           }
         ]
       })
 
+      req.izone.week = '2017w41'
+
       return sut.import(req, res, next)
         .then(() => {
+          expect(databaseAdapter.import)
+            .callCount(0)
+
           expect(databaseAdapter.update)
             .callCount(1)
             .calledWith('1q2w3e', {
               jl_starttime: startTimeCalendar.format('YYYY-MM-DD HH:mm:ss'),
               jl_endtime: endTimeCalendar.format('YYYY-MM-DD HH:mm:ss'),
-              jl_hours: 1,
+              jl_hours: 1.5,
               jl_description: 'working'
             })
         })
