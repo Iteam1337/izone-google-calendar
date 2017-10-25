@@ -10,8 +10,6 @@
         "test"
       ],
       "extensions": "js",
-      "quiet": false,
-      "legacyWatch": true,
       "inherit": true
     }
   },
