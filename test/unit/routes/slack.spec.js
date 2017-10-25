@@ -506,7 +506,7 @@ describe('routes/slack', () => {
         })
     })
 
-    it.only('updates event if moved to another week', () => {
+    it('updates event if moved to another week', () => {
       const startTimeCalendar = moment('2017-10-10 08:30:00')
       const startTimeIzone = moment('2017-10-16 08:30:00')
 
