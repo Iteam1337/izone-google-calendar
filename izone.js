@@ -1,5 +1,3 @@
-'use strict'
-
 const cli = require('./lib/cli')
 const google = require('./lib/adapters/google')
 

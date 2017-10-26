@@ -10,8 +10,6 @@
         "test"
       ],
       "extensions": "js",
-      "quiet": false,
-      "legacyWatch": true,
       "inherit": true
     }
   },
@@ -39,7 +37,7 @@
     "moment": "^2.17.1",
     "moment-timezone": "^0.5.11",
     "mssql": "^3.3.0",
-    "nconf": "^0.8.4",
+    "nconf": "0.8.4",
     "restify": "^4.3.0"
   },
   "devDependencies": {
