@@ -76,6 +76,8 @@ describe('routes/slack', () => {
       req.params = {
         payload: JSON.stringify({ response_url: 'http://izone.test' })
       }
+      req.izone = { user: {} }
+
       return sut.import(req, res, next)
         .then(() => {
           expect(izoneService.getAllEvents).callCount(1)
