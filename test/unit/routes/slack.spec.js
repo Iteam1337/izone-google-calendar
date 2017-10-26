@@ -38,7 +38,8 @@ describe('routes/slack', () => {
     databaseAdapter = {
       import: stub().resolves(),
       getJobByAlias: stub(),
-      update: stub().resolves()
+      update: stub().resolves(),
+      getEventByGCalId: stub().resolves()
     }
 
     googleAdapter = {
@@ -482,17 +483,16 @@ describe('routes/slack', () => {
           }
         ],
         izone: [
-          {
-            jl_endtime: endTimeIzone,
-            jl_starttime: startTimeIzone,
-            jl_description: 'working',
-            jl_hours: 1,
-            jl_alias: alias,
-            jl_gcal_id: '1q2w3e'
-          }
         ]
       })
-
+      databaseAdapter.getEventByGCalId.resolves({
+        jl_endtime: endTimeIzone,
+        jl_starttime: startTimeIzone,
+        jl_description: 'working',
+        jl_hours: 1,
+        jl_alias: alias,
+        jl_gcal_id: '1q2w3e'
+      })
       return sut.import(req, res, next)
         .then(() => {
           expect(databaseAdapter.update)
@@ -526,18 +526,16 @@ describe('routes/slack', () => {
             id: '1q2w3e'
           }
         ],
-        izone: [
-          {
-            jl_endtime: endTimeIzone,
-            jl_starttime: startTimeIzone,
-            jl_description: 'working',
-            jl_hours: 1.5,
-            jl_alias: alias,
-            jl_gcal_id: '1q2w3e'
-          }
-        ]
+        izone: []
       })
-
+      databaseAdapter.getEventByGCalId.resolves({
+        jl_endtime: endTimeIzone,
+        jl_starttime: startTimeIzone,
+        jl_description: 'working',
+        jl_hours: 1.5,
+        jl_alias: alias,
+        jl_gcal_id: '1q2w3e'
+      })
       req.izone.week = '2017w41'
 
       return sut.import(req, res, next)
@@ -575,16 +573,15 @@ describe('routes/slack', () => {
             id: '1q2w3e'
           }
         ],
-        izone: [
-          {
-            jl_endtime: endTimeIzone,
-            jl_starttime: startTime,
-            jl_description: 'working',
-            jl_hours: 2,
-            jl_alias: alias,
-            jl_gcal_id: '1q2w3e'
-          }
-        ]
+        izone: []
+      })
+      databaseAdapter.getEventByGCalId.resolves({
+        jl_endtime: endTimeIzone,
+        jl_starttime: startTime,
+        jl_description: 'working',
+        jl_hours: 2,
+        jl_alias: alias,
+        jl_gcal_id: '1q2w3e'
       })
 
       return sut.import(req, res, next)
@@ -617,18 +614,16 @@ describe('routes/slack', () => {
             id: '1q2w3e'
           }
         ],
-        izone: [
-          {
-            jl_endtime: endTime,
-            jl_starttime: startTime,
-            jl_description: 'doing stuff',
-            jl_hours: 1,
-            jl_alias: alias,
-            jl_gcal_id: '1q2w3e'
-          }
-        ]
+        izone: []
       })
-
+      databaseAdapter.getEventByGCalId.resolves({
+        jl_endtime: endTime,
+        jl_starttime: startTime,
+        jl_description: 'working',
+        jl_hours: 2,
+        jl_alias: alias,
+        jl_gcal_id: '1q2w3e'
+      })
       return sut.import(req, res, next)
         .then(() => {
           expect(databaseAdapter.update)
