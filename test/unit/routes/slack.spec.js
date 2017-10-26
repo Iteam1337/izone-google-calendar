@@ -76,7 +76,7 @@ describe('routes/slack', () => {
       req.params = {
         payload: JSON.stringify({ response_url: 'http://izone.test' })
       }
-      req.izone = { user: {} }
+      req.izone = { user: {}, google: {} }
 
       return sut.import(req, res, next)
         .then(() => {
