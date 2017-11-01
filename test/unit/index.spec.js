@@ -61,7 +61,7 @@ describe('REST API', () => {
     it('sets up a POST "/slack" route', () => {
       expect(appMock.post)
         .callCount(2)
-        .calledWith('/slack/import')
+        .calledWith('/slack/button')
         .calledWith('/slack/summary')
     })
 

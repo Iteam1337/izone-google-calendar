@@ -16,6 +16,7 @@ describe('routes/slack', () => {
 
   beforeEach(() => {
     req = {
+      body: {},
       params: {}
     }
 
