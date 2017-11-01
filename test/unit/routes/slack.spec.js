@@ -185,7 +185,7 @@ describe('routes/slack', () => {
         })
     })
 
-    it('always imports everything if autoimport is set', () => {
+    xit('always imports everything if autoimport is set', () => {
       req.izone.user.p_izone_autoimport = true
 
       const events = {
@@ -316,6 +316,7 @@ describe('routes/slack', () => {
     })
 
     it('does not import hours if time entry has not ended yet', () => {
+      req.izone.import = aliases.hasJob
       izoneService.getAllEvents = stub().resolves({
         calendar: [
           {
@@ -371,6 +372,7 @@ describe('routes/slack', () => {
     })
 
     it('imports a time entry if alias maps to a single "job" in the database', () => {
+      req.izone.import = aliases.hasJob
       izoneService.getAllEvents = stub().resolves({
         calendar: [
           {
@@ -394,6 +396,7 @@ describe('routes/slack', () => {
     })
 
     it('imports time entries if alias maps to a single "job" in the database', () => {
+      req.izone.import = aliases.hasJob
       izoneService.getAllEvents = stub().resolves({
         calendar: [
           {
@@ -469,6 +472,8 @@ describe('routes/slack', () => {
       const endTimeCalendar = moment('2017-06-30 10:00:00')
       const endTimeIzone = moment('2017-06-30 11:00:00')
 
+      req.izone.import = alias
+
       izoneService.getAllEvents = stub().resolves({
         calendar: [
           {
@@ -513,6 +518,8 @@ describe('routes/slack', () => {
 
       const endTimeCalendar = moment('2017-10-10 10:00:00')
       const endTimeIzone = moment('2017-10-16 10:00:00')
+
+      req.izone.import = alias
 
       izoneService.getAllEvents = stub().resolves({
         calendar: [
@@ -562,6 +569,8 @@ describe('routes/slack', () => {
 
       const endTimeCalendar = moment('2017-06-30 10:00:00')
       const endTimeIzone = moment('2017-06-30 11:00:00')
+
+      req.izone.import = alias
 
       izoneService.getAllEvents = stub().resolves({
         calendar: [
