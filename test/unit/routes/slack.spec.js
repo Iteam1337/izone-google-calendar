@@ -614,6 +614,8 @@ describe('routes/slack', () => {
       const startTime = moment('2017-06-30 09:00:00')
       const endTime = moment('2017-06-30 10:00:00')
 
+      req.izone.import = alias
+
       izoneService.getAllEvents = stub().resolves({
         calendar: [
           {
