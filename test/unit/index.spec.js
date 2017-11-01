@@ -60,8 +60,9 @@ describe('REST API', () => {
 
     it('sets up a POST "/slack" route', () => {
       expect(appMock.post)
-        .callCount(1)
-        .calledWith('/slack')
+        .callCount(2)
+        .calledWith('/slack/import')
+        .calledWith('/slack/summary')
     })
 
     it('calls app.listen()', () => {
