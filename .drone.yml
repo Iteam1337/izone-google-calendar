@@ -2,6 +2,7 @@ pipeline:
   run_tests:
     image: node:8
     commands:
+      - echo ${MEOW}
       - npm install -s
       - npm run test
   publish_image:
